@@ -42,8 +42,8 @@ export default function Home() {
       {/* Floating Apple Liquid Glass Dock Navbar */}
       <Navbar />
 
-      {/* Hero Section */}
-      <section id="top" className="hero hero-motion">
+      {/* Hero Section (Awwwards-Style Kinetic & 3D Split Layout) */}
+      <section id="top" className="hero hero-split-layout">
         {/* Floating Ambient Glow Orbs */}
         <div className="ambient-orbs-container" aria-hidden="true">
           <div className="ambient-orb orb-1" />
@@ -51,43 +51,94 @@ export default function Home() {
           <div className="ambient-orb orb-3" />
         </div>
 
-        <div className="hero-badge animate-fade-down">
-          <span className="badge-star star-glow">★ 4.0</span>
-          <span>(2,874+ Google Reviews) • Multi-Cuisine &amp; Tiffin</span>
-        </div>
-        
-        <p className="kicker animate-fade-down delay-1">Opposite Malayala Manorama, KK Road, Kottayam</p>
-        
-        <h1 className="hero-title animated-brand-title" aria-label="Thali">
-          {"Thali".split("").map((char, index) => (
-            <span
-              key={index}
-              className="animated-letter"
-              style={{ "--char-index": index }}
-            >
-              {char}
-            </span>
-          ))}
-        </h1>
+        <div className="hero-split-grid wrap">
+          {/* Left Column: Editorial Brand & Interactive Triggers */}
+          <div className="hero-left-column">
+            <div className="hero-meta-badges animate-fade-down">
+              <div className="hero-live-status glass">
+                <span className="live-pulse-dot" />
+                <span className="live-status-text">Open Today 7:00 AM – 10:30 PM</span>
+              </div>
+              <div className="hero-rating-badge glass">
+                <span className="badge-star star-glow">★ 4.0</span>
+                <span>(2,874+ Google Reviews)</span>
+              </div>
+            </div>
 
-        <p className="sub-title animate-fade-down delay-2">
-          Traditional Kerala Meals • Specialty Dosas • Dum Biryani
-        </p>
+            <p className="kicker animate-fade-down delay-1">
+              Opposite Malayala Manorama, KK Road, Kottayam
+            </p>
 
-        {/* Interactive 3D Platter */}
-        <Plate />
+            <h1 className="hero-title animated-brand-title" aria-label="Thali Restaurant & Cafe">
+              {"Thali".split("").map((char, index) => (
+                <span
+                  key={index}
+                  className="animated-letter"
+                  style={{ "--char-index": index }}
+                >
+                  {char}
+                </span>
+              ))}
+            </h1>
 
-        <div className="row center hero-buttons animate-fade-up delay-1">
-          <a className="btn solid btn-glow btn-magnetic" href="#order">
-            Order Online
-          </a>
-          <a className="btn ghost btn-icon-row btn-magnetic" href={`tel:${PHONE}`}>
-            <PhoneCallIcon size={18} />
-            <span>Call {PHONE_DISPLAY}</span>
-          </a>
-          <a className="btn outline-dark btn-magnetic" href="#reserve">
-            Reserve Table
-          </a>
+            <p className="hero-tagline animate-fade-down delay-2">
+              Authentic Kerala Banana Leaf Meals, Crispy Specialty Dosas, and Flavourful Malabar Dum Biryani.
+            </p>
+
+            {/* Quick Cuisine Chips */}
+            <div className="hero-cuisine-chips animate-fade-down delay-2">
+              <span className="cuisine-chip">🍛 Unlimited Meals</span>
+              <span className="cuisine-chip">🥞 Ghee Roasts</span>
+              <span className="cuisine-chip">🍗 Malabar Biryani</span>
+              <span className="cuisine-chip">🥛 Sambharam</span>
+            </div>
+
+            {/* Magnetic Action Buttons */}
+            <div className="hero-buttons animate-fade-up delay-1">
+              <a className="btn solid btn-glow btn-magnetic" href="#order">
+                Order Online
+              </a>
+              <a className="btn ghost btn-icon-row btn-magnetic" href={`tel:${PHONE}`}>
+                <PhoneCallIcon size={18} />
+                <span>Call {PHONE_DISPLAY}</span>
+              </a>
+              <a className="btn outline-dark btn-magnetic" href="#reserve">
+                Reserve Table
+              </a>
+            </div>
+
+            {/* Trust Highlights Micro-Bar */}
+            <div className="hero-trust-bar glass animate-fade-up delay-2">
+              <div className="trust-item">
+                <span className="trust-icon">🍲</span>
+                <div>
+                  <strong>All-You-Can-Eat</strong>
+                  <small>Unlimited refills</small>
+                </div>
+              </div>
+              <div className="trust-divider" />
+              <div className="trust-item">
+                <span className="trust-icon">🌱</span>
+                <div>
+                  <strong>Pure &amp; Fresh</strong>
+                  <small>Homestyle spices</small>
+                </div>
+              </div>
+              <div className="trust-divider" />
+              <div className="trust-item">
+                <span className="trust-icon">❄️</span>
+                <div>
+                  <strong>AC Dining</strong>
+                  <small>Family &amp; Cafe</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Interactive 3D Platter Centerpiece */}
+          <div className="hero-right-column animate-fade-up">
+            <Plate />
+          </div>
         </div>
       </section>
 

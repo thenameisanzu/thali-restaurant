@@ -11,7 +11,7 @@ export default function Plate() {
 
   const currentDish = plateDishes[activeIdx];
 
-  // Subtle auto-cycle through dishes only when user is idle & not popped out
+  // Auto-cycle dishes only when user is idle & not popped out
   useEffect(() => {
     if (isUserInteracting || showPopout) return;
     const interval = setInterval(() => {
@@ -40,8 +40,8 @@ export default function Plate() {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((y - centerY) / centerY) * -12; // 3D tilt
-    const rotateY = ((x - centerX) / centerX) * 12;
+    const rotateX = ((y - centerY) / centerY) * -14; // Enhanced 14 deg 3D tilt
+    const rotateY = ((x - centerX) / centerX) * 14;
 
     setTilt({ x: rotateX, y: rotateY });
   };
@@ -73,12 +73,18 @@ export default function Plate() {
       onMouseLeave={handleMouseLeave}
       onTouchStart={() => setIsUserInteracting(true)}
     >
+      {/* Floating Ambient Halo behind the platter */}
+      <div className="platter-ambient-glow" aria-hidden="true" />
+
       {/* Interactive 3D Platter Viewport */}
       <div
         className="plate-viewport-clean"
         style={{
-          transform: `perspective(1100px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-          transition: tilt.x === 0 ? "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)" : "transform 0.08s ease-out",
+          transform: `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+          transition:
+            tilt.x === 0
+              ? "transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1)"
+              : "transform 0.08s ease-out",
         }}
       >
         {/* Platter Disc with Specular Rim */}
@@ -94,7 +100,7 @@ export default function Plate() {
           <div
             className="dish-spotlight-overlay"
             style={{
-              background: `radial-gradient(circle 100px at ${currentDish.x}% ${currentDish.y}%, rgba(212, 163, 89, 0.5) 0%, rgba(30, 90, 46, 0.2) 50%, transparent 85%)`,
+              background: `radial-gradient(circle 110px at ${currentDish.x}% ${currentDish.y}%, rgba(212, 163, 89, 0.55) 0%, rgba(30, 90, 46, 0.22) 50%, transparent 85%)`,
             }}
             aria-hidden="true"
           />
@@ -117,7 +123,9 @@ export default function Plate() {
             return (
               <div
                 key={dish.id}
-                className={`dish-hotspot-wrapper ${isSelected ? "is-active 3d-pin-pop" : ""}`}
+                className={`dish-hotspot-wrapper ${
+                  isSelected ? "is-active 3d-pin-pop" : ""
+                }`}
                 style={{
                   left: `${dish.x}%`,
                   top: `${dish.y}%`,
@@ -236,6 +244,21 @@ export default function Plate() {
         </div>
       </div>
 
+      {/* Orbiting Satellite Quick-Select Dish Pills */}
+      <div className="platter-satellite-chips" aria-label="Quick select dishes">
+        {plateDishes.slice(0, 4).map((d, i) => (
+          <button
+            key={d.id}
+            type="button"
+            className={`satellite-chip glass ${activeIdx === i ? "is-active" : ""}`}
+            onClick={() => handleOpenDish(i)}
+          >
+            <span className="chip-icon">{d.icon}</span>
+            <span className="chip-name">{d.n.split(" ")[0]}</span>
+          </button>
+        ))}
+      </div>
+
       {/* Touch prompt instructions hint */}
       <div
         className="plate-touch-hint animate-fade-up"
@@ -246,8 +269,8 @@ export default function Plate() {
         <span className="touch-icon">👆</span>
         <span>
           {showPopout
-            ? "Showing 3D pop-up of " + currentDish.n + " (Click ✕ to close)"
-            : "Tap any dish pin to pop up its 3D close-up image & details"}
+            ? `3D View: ${currentDish.n} (Click ✕ to close)`
+            : "Tap any dish on the platter to pop up in 3D mode"}
         </span>
       </div>
     </div>
