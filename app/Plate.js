@@ -77,6 +77,8 @@ export default function Plate() {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
   const containerRef = useRef(null);
+  const touchStartRef = useRef({ x: 0, y: 0 });
+  const isDraggingRef = useRef(false);
 
   useEffect(() => {
     let animationFrameId;
@@ -91,25 +93,25 @@ export default function Plate() {
           targetAngleRef.current = progress * 360;
         }
       } else {
-        targetAngleRef.current = (window.scrollY * 0.4) % 360;
+        targetAngleRef.current = (window.scrollY * 0.45) % 360;
       }
     };
 
-    // 60/120fps Inertia Damping Physics Loop (Ultra Smooth Gliding)
+    // 60/120fps Native App-Like Physics Interpolation (Ultra Smooth Damping)
     const physicsLoop = () => {
       // 1. Rotation angle damping
       const angleDiff = targetAngleRef.current - currentAngleRef.current;
       if (Math.abs(angleDiff) > 0.005) {
-        currentAngleRef.current += angleDiff * 0.082;
+        currentAngleRef.current += angleDiff * 0.088;
         setRotationAngle(currentAngleRef.current);
       }
 
-      // 2. Mouse 3D tilt damping
+      // 2. 3D tilt damping
       const tiltXDiff = targetTiltRef.current.x - currentTiltRef.current.x;
       const tiltYDiff = targetTiltRef.current.y - currentTiltRef.current.y;
       if (Math.abs(tiltXDiff) > 0.01 || Math.abs(tiltYDiff) > 0.01) {
-        currentTiltRef.current.x += tiltXDiff * 0.1;
-        currentTiltRef.current.y += tiltYDiff * 0.1;
+        currentTiltRef.current.x += tiltXDiff * 0.12;
+        currentTiltRef.current.y += tiltYDiff * 0.12;
         setTilt({ ...currentTiltRef.current });
       }
 
@@ -126,7 +128,7 @@ export default function Plate() {
     };
   }, []);
 
-  // 3D Magnetic Mouse Tilt with Smooth Target Tracking
+  // 3D Magnetic Mouse Tilt (Desktop & iPad Trackpad)
   const handleMouseMove = (e) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -136,13 +138,44 @@ export default function Plate() {
     const centerY = rect.height / 2;
 
     targetTiltRef.current = {
-      x: ((y - centerY) / centerY) * -5.5,
-      y: ((x - centerX) / centerX) * 5.5,
+      x: ((y - centerY) / centerY) * -5,
+      y: ((x - centerX) / centerX) * 5,
     };
   };
 
   const handleMouseLeave = () => {
     targetTiltRef.current = { x: 0, y: 0 };
+  };
+
+  // Mobile & iPad Touch Swipe Gestures
+  const handleTouchStart = (e) => {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    touchStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+    };
+    isDraggingRef.current = true;
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDraggingRef.current || e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    const deltaY = touch.clientY - touchStartRef.current.y;
+    const deltaX = touch.clientX - touchStartRef.current.x;
+
+    // Fluid touch rotation drag
+    const touchDelta = deltaY * 0.35 - deltaX * 0.25;
+    targetAngleRef.current += touchDelta * 0.2;
+
+    touchStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+    };
+  };
+
+  const handleTouchEnd = () => {
+    isDraggingRef.current = false;
   };
 
   const spinStep = (dir) => {
@@ -155,6 +188,10 @@ export default function Plate() {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
     >
       {/* Ambient Radial Golden Aura */}
       <div className="wheel-ambient-glow" aria-hidden="true" />
@@ -166,7 +203,7 @@ export default function Plate() {
           transform: `perspective(1200px) rotateX(${tilt.x.toFixed(2)}deg) rotateY(${tilt.y.toFixed(2)}deg)`,
         }}
       >
-        {/* Revolving Rotor Hub (Silky direct frame transforms) */}
+        {/* Revolving Rotor Hub */}
         <div
           className="wheel-rotor-hub"
           style={{
@@ -188,7 +225,7 @@ export default function Plate() {
                   transform: `rotate(${dish.baseAngle}deg) translate(var(--wheel-radius)) rotate(-${dish.baseAngle}deg)`,
                 }}
               >
-                {/* Counter-rotate the dish unit so food image stays upright */}
+                {/* Counter-rotate dish unit to maintain upright orientation */}
                 <div
                   className="wheel-dish-unit"
                   style={{
@@ -200,6 +237,8 @@ export default function Plate() {
                       src={dish.img}
                       alt={dish.n}
                       className="dish-plate-img"
+                      loading="eager"
+                      draggable="false"
                     />
                     <div className="wheel-specular-glare" aria-hidden="true" />
 
@@ -221,7 +260,7 @@ export default function Plate() {
         </div>
       </div>
 
-      {/* Clean Bottom Controls Bar */}
+      {/* Touch-Optimized Bottom Controls Bar */}
       <div className="wheel-controls-bar">
         <button
           type="button"
@@ -235,7 +274,7 @@ export default function Plate() {
         <div className="wheel-hint-pill glass">
           <span className="wheel-spin-icon">🎡</span>
           <span>
-            <strong>9 Specialties</strong> • Scroll down to revolve
+            <strong>9 Specialties</strong> • Scroll or swipe to spin
           </span>
         </div>
 
