@@ -2,9 +2,10 @@ import Reserve from "./Reserve";
 import Plate from "./Plate";
 import Menu from "./Menu";
 import OpenNow from "./OpenNow";
-import SpicesBackground from "./SpicesBackground";
 import MarqueeRibbon from "./MarqueeRibbon";
 import Navbar from "./Navbar";
+import Spotlight from "./Spotlight";
+import StatsCounter from "./StatsCounter";
 import { reviewsData } from "./data";
 import {
   SwiggyBrandIcon,
@@ -35,8 +36,8 @@ const galleryShots = [
 export default function Home() {
   return (
     <main className="main-wrapper">
-      {/* Floating Ambient Kinetic Spices Canvas */}
-      <SpicesBackground />
+      {/* Interactive Desktop Spotlight Glow */}
+      <Spotlight />
 
       {/* Floating Apple Liquid Glass Dock Navbar */}
       <Navbar />
@@ -98,42 +99,47 @@ export default function Home() {
       />
 
       {/* Story / About Section */}
-      <section id="story" className="wrap story">
-        <div className="story-content">
-          <span className="section-tag animate-slide-right">Our Culinary Tradition</span>
-          <h2 className="story-heading">
-            Authentic Kerala Meals, served unlimited the way it is eaten at home.
-          </h2>
-          <p className="story-desc">
-            Located right opposite Malayala Manorama on KK Road, <strong>Thali Restaurant &amp; Café</strong> is Kottayam's beloved food destination for traditional Kerala banana leaf meals, hot crispy specialty dosas, fresh juice shakes, and flavourful Malabar biryanis.
-          </p>
-          <div className="feature-grid">
-            <div className="feature-item hover-card-motion glass">
-              <span className="f-icon float-icon">🍚</span>
-              <div>
-                <strong>All-You-Can-Eat</strong>
-                <p>Hot refills of rice, sambar, rasam, and curries before you ask.</p>
+      <section id="story" className="wrap story-wrapper">
+        <div className="story">
+          <div className="story-content">
+            <span className="section-tag animate-slide-right">Our Culinary Tradition</span>
+            <h2 className="story-heading">
+              Authentic Kerala Meals, served unlimited the way it is eaten at home.
+            </h2>
+            <p className="story-desc">
+              Located right opposite Malayala Manorama on KK Road, <strong>Thali Restaurant &amp; Café</strong> is Kottayam's beloved food destination for traditional Kerala banana leaf meals, hot crispy specialty dosas, fresh juice shakes, and flavourful Malabar biryanis.
+            </p>
+            <div className="feature-grid">
+              <div className="feature-item hover-card-motion glass">
+                <span className="f-icon float-icon">🍚</span>
+                <div>
+                  <strong>All-You-Can-Eat</strong>
+                  <p>Hot refills of rice, sambar, rasam, and curries before you ask.</p>
+                </div>
+              </div>
+              <div className="feature-item hover-card-motion glass">
+                <span className="f-icon float-icon-alt">🌱</span>
+                <div>
+                  <strong>Pure &amp; Fresh Ingredients</strong>
+                  <p>Kudampuli, cold-pressed coconut oil, fresh grated coconut and home ground spices.</p>
+                </div>
               </div>
             </div>
-            <div className="feature-item hover-card-motion glass">
-              <span className="f-icon float-icon-alt">🌱</span>
-              <div>
-                <strong>Pure &amp; Fresh Ingredients</strong>
-                <p>Kudampuli, cold-pressed coconut oil, fresh grated coconut and home ground spices.</p>
-              </div>
+          </div>
+          <div className="story-images">
+            <div className="story-img-card s1 3d-card-hover">
+              <img src="/dining_hall.jpg" alt="Thali Restaurant Kottayam Interior & Dining" />
+              <span className="img-caption floating-badge">Family Dining Hall</span>
+            </div>
+            <div className="story-img-card s2 3d-card-hover">
+              <img src="/masala_dosa.jpg" alt="Crispy Masala Dosa with Sambar and Chutneys" />
+              <span className="img-caption floating-badge-alt">Specialty Dosas</span>
             </div>
           </div>
         </div>
-        <div className="story-images">
-          <div className="story-img-card s1 3d-card-hover">
-            <img src="/dining_hall.jpg" alt="Thali Restaurant Kottayam Interior & Dining" />
-            <span className="img-caption floating-badge">Family Dining Hall</span>
-          </div>
-          <div className="story-img-card s2 3d-card-hover">
-            <img src="/masala_dosa.jpg" alt="Crispy Masala Dosa with Sambar and Chutneys" />
-            <span className="img-caption floating-badge-alt">Specialty Dosas</span>
-          </div>
-        </div>
+
+        {/* Animated Heritage Counters Banner */}
+        <StatsCounter />
       </section>
 
       {/* Menu Section */}

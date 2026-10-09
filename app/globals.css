@@ -1984,6 +1984,89 @@ address {
   }
 }
 
+/* 9. Interactive Desktop Spotlight Glow */
+.ambient-cursor-spotlight {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(
+    circle at center,
+    rgba(30, 90, 46, 0.08) 0%,
+    rgba(212, 163, 89, 0.04) 40%,
+    transparent 70%
+  );
+  mix-blend-mode: multiply;
+  transition: opacity 0.3s ease;
+  will-change: transform;
+}
+
+/* 10. Story Wrapper & Animated Stats Counter */
+.story-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .stats-row {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+}
+
+.stat-card {
+  padding: 24px 20px;
+  border-radius: var(--r);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--liquid-highlight), 0 20px 40px -6px rgba(18, 56, 28, 0.18);
+}
+
+.stat-number {
+  font-family: var(--serif), Georgia, serif;
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--g);
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.stat-suffix {
+  font-size: 0.65em;
+  color: var(--gold);
+  margin-left: 2px;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--mute);
+  line-height: 1.35;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
@@ -1992,4 +2075,5 @@ address {
     scroll-behavior: auto !important;
   }
 }
+
 
