@@ -144,9 +144,6 @@ export default function Plate() {
       {/* Ambient Radial Golden Aura */}
       <div className="revolving-ambient-glow" aria-hidden="true" />
 
-      {/* Orbit Track Indicator Ring */}
-      <div className="orbit-track-ring" aria-hidden="true" />
-
       {/* 3D Revolving Disk Carousel Stage */}
       <div
         className="revolving-disk-stage"

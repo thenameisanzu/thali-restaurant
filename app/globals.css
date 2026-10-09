@@ -822,18 +822,18 @@ a {
    Revolving Carousel Disk Wheel (9 Dishes, 4–5 Visible on Arc)
    ========================================= */
 :root {
-  --disk-radius: 175px;
+  --disk-radius: 185px;
 }
 
 @media (min-width: 900px) {
   :root {
-    --disk-radius: 250px;
+    --disk-radius: 275px;
   }
 }
 
 @media (min-width: 1200px) {
   :root {
-    --disk-radius: 280px;
+    --disk-radius: 310px;
   }
 }
 
@@ -861,38 +861,18 @@ a {
   position: absolute;
   top: 50%;
   right: 0;
-  transform: translate(25%, -50%);
-  width: 500px;
-  height: 500px;
+  transform: translate(35%, -50%);
+  width: 520px;
+  height: 520px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(212, 163, 89, 0.3) 0%, rgba(30, 90, 46, 0.16) 50%, transparent 75%);
-  filter: blur(55px);
+  background: radial-gradient(circle, rgba(212, 163, 89, 0.32) 0%, rgba(30, 90, 46, 0.16) 50%, transparent 75%);
+  filter: blur(60px);
   pointer-events: none;
   z-index: 0;
   animation: glowPulse 5s infinite alternate ease-in-out;
 }
 
-/* Orbit Track Ring (Positioned to cradle the 5-dish arc) */
-.orbit-track-ring {
-  position: absolute;
-  top: 50%;
-  right: calc(var(--disk-radius) * -0.38);
-  transform: translateY(-50%);
-  width: calc(var(--disk-radius) * 2);
-  height: calc(var(--disk-radius) * 2);
-  border-radius: 50%;
-  border: 1.5px dashed rgba(212, 163, 89, 0.45);
-  pointer-events: none;
-  z-index: 1;
-}
-
-@media (max-width: 899px) {
-  .orbit-track-ring {
-    right: calc(var(--disk-radius) * -0.25);
-  }
-}
-
-/* 3D Revolving Stage */
+/* 3D Revolving Stage (Shifted further right, ring hidden) */
 .revolving-disk-stage {
   position: relative;
   width: calc(var(--disk-radius) * 2);
@@ -902,12 +882,12 @@ a {
   justify-content: center;
   transform-style: preserve-3d;
   z-index: 2;
-  margin-right: calc(var(--disk-radius) * -0.38);
+  margin-right: calc(var(--disk-radius) * -0.72);
 }
 
 @media (max-width: 899px) {
   .revolving-disk-stage {
-    margin-right: calc(var(--disk-radius) * -0.25);
+    margin-right: calc(var(--disk-radius) * -0.62);
   }
 }
 
