@@ -797,30 +797,144 @@ a {
    ========================================= */
 .hero-scroll-stage {
   position: relative;
-  height: 210vh; /* Smooth runway for rotating through 3 sets (9 dishes) */
   width: 100%;
 }
 
-.hero-sticky-frame {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  min-height: 620px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow-x: clip;
-}
-
-@media (max-width: 899px) {
+@media (min-width: 768px) {
   .hero-scroll-stage {
-    height: 165vh;
+    height: 210vh; /* Pinned rotating runway on iPad & Desktop */
+  }
+
+  .hero-sticky-frame {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    min-height: 620px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-x: clip;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero {
+    min-height: auto !important;
+    padding: calc(68px + max(8px, env(safe-area-inset-top))) 0 24px !important;
+  }
+
+  .hero-scroll-stage {
+    height: auto !important;
+  }
+
+  .hero-sticky-frame {
+    position: relative !important;
+    height: auto !important;
+    min-height: auto !important;
+    display: block !important;
+  }
+
+  .hero-split-grid {
+    gap: 20px !important;
+  }
+
+  .hero-title {
+    font-size: clamp(2.6rem, 9vw, 3.8rem) !important;
   }
 }
 
 /* =========================================
-   Revolving Dish Wheel (Responsive Mobile & iPad Optimized)
+   Mobile App Coverflow vs Desktop/iPad Wheel
+   ========================================= */
+.mobile-app-dish-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  margin-top: 8px;
+}
+
+.mobile-dish-coverflow {
+  position: relative;
+  width: 100%;
+  height: 190px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+}
+
+.mobile-coverflow-card {
+  position: absolute;
+  transition: all 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-coverflow-card.is-center {
+  width: 180px;
+  height: 180px;
+  z-index: 10;
+  transform: translateX(0) scale(1);
+  opacity: 1;
+}
+
+.mobile-coverflow-card.is-left {
+  width: 135px;
+  height: 135px;
+  z-index: 5;
+  transform: translateX(-115px) scale(0.78) rotateY(20deg);
+  opacity: 0.55;
+}
+
+.mobile-coverflow-card.is-right {
+  width: 135px;
+  height: 135px;
+  z-index: 5;
+  transform: translateX(115px) scale(0.78) rotateY(-20deg);
+  opacity: 0.55;
+}
+
+.mobile-dish-info {
+  margin-top: 12px;
+  padding: 5px 16px;
+  border-radius: 999px;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.mobile-dish-tag {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--g);
+}
+
+.mobile-dish-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--g-dark);
+}
+
+@media (min-width: 768px) {
+  .mobile-app-dish-stage {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .desktop-ipad-wheel-stage {
+    display: none !important;
+  }
+}
+
+/* =========================================
+   Revolving Dish Wheel (iPad & Desktop)
    ========================================= */
 :root {
   --wheel-radius: 140px;
@@ -848,7 +962,7 @@ a {
   position: relative;
   width: 100%;
   max-width: 620px;
-  min-height: 420px;
+  min-height: 340px;
   display: flex;
   flex-direction: column;
   align-items: center;
