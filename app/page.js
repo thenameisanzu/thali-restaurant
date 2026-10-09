@@ -42,7 +42,7 @@ export default function Home() {
           />
           <div className="brand-text">
             <span className="brand-logo">THALI</span>
-            <span className="brand-sub">Est. 1983 • Kottayam</span>
+            <span className="brand-sub">Café &amp; Restaurant</span>
           </div>
         </a>
         <nav aria-label="Main Navigation">
