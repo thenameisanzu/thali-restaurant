@@ -8,6 +8,7 @@ const DISHES = [
     img: "/hero_thali.jpg",
     tag: "🍛 Unlimited Meals",
     desc: "18+ Authentic Kerala curries & hot refills",
+    baseAngle: 180, // Center Left (Default 1)
   },
   {
     id: "dosa",
@@ -15,13 +16,15 @@ const DISHES = [
     img: "/masala_dosa.jpg",
     tag: "🥞 Crispy Tiffin",
     desc: "Golden roasted with pure ghee & chutneys",
+    baseAngle: 120, // Top Left (Default 2)
   },
   {
     id: "biryani",
     n: "Malabar Dum Biryani",
     img: "/chicken_biryani.jpg",
-    tag: "🍗 Chef's Dum Biryani",
+    tag: "🍗 Malabar Biryani",
     desc: "Fragrant kaima rice with tender spiced chicken",
+    baseAngle: 240, // Bottom Left (Default 3)
   },
   {
     id: "payasam",
@@ -29,6 +32,7 @@ const DISHES = [
     img: "/palada_payasam.jpg",
     tag: "✨ Daily Sweet",
     desc: "Slow-simmered milk payasam with tender ada",
+    baseAngle: 300, // Top Right (Appears on scroll)
   },
   {
     id: "chicken-dosa",
@@ -36,6 +40,7 @@ const DISHES = [
     img: "/chicken_dosa.jpg",
     tag: "🥘 Non-Veg Dosa",
     desc: "Crisp dosa stuffed with spicy chicken roast",
+    baseAngle: 0, // Center Right (Appears on scroll)
   },
   {
     id: "sambar",
@@ -43,13 +48,14 @@ const DISHES = [
     img: "/sambar.jpg",
     tag: "🍲 Homestyle Curry",
     desc: "Simmered toor dal with fresh drumsticks & spices",
+    baseAngle: 60, // Bottom Right (Appears on scroll)
   },
 ];
 
 export default function Plate() {
   const [rotationAngle, setRotationAngle] = useState(0);
+  const [activeSet, setActiveSet] = useState(1); // 1: Dishes 1-3, 2: Dishes 4-6
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [activeIdx, setActiveIdx] = useState(0);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -58,15 +64,23 @@ export default function Plate() {
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          // Calculate rotation from scroll position
-          const rot = window.scrollY * 0.35;
-          setRotationAngle(rot);
-          
-          // Calculate which dish is currently closest to the front (angle % 360)
-          const normalized = ((-rot % 360) + 360) % 360;
-          const index = Math.round(normalized / 60) % DISHES.length;
-          setActiveIdx(index);
-
+          const stage = document.getElementById("hero-stage");
+          if (stage) {
+            const rect = stage.getBoundingClientRect();
+            const totalScrollable = stage.offsetHeight - window.innerHeight;
+            if (totalScrollable > 0) {
+              const progress = Math.min(Math.max(-rect.top / totalScrollable, 0), 1);
+              // Rotate by 180 degrees over the course of the pinned hero scroll
+              const currentAngle = progress * 180;
+              setRotationAngle(currentAngle);
+              setActiveSet(progress >= 0.5 ? 2 : 1);
+            }
+          } else {
+            // Fallback if no stage
+            const rot = Math.min(window.scrollY * 0.3, 180);
+            setRotationAngle(rot);
+            setActiveSet(rot >= 90 ? 2 : 1);
+          }
           ticking = false;
         });
         ticking = true;
@@ -74,6 +88,7 @@ export default function Plate() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Initial check
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -86,8 +101,8 @@ export default function Plate() {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((y - centerY) / centerY) * -8;
-    const rotateY = ((x - centerX) / centerX) * 8;
+    const rotateX = ((y - centerY) / centerY) * -6;
+    const rotateY = ((x - centerX) / centerX) * 6;
 
     setTilt({ x: rotateX, y: rotateY });
   };
@@ -96,16 +111,17 @@ export default function Plate() {
     setTilt({ x: 0, y: 0 });
   };
 
-  const spinPrev = () => {
-    setRotationAngle((prev) => prev - 60);
+  const toggleSet = (targetSet) => {
+    const stage = document.getElementById("hero-stage");
+    if (stage) {
+      const totalScrollable = stage.offsetHeight - window.innerHeight;
+      const targetScroll = stage.offsetTop + (targetSet === 2 ? totalScrollable : 0);
+      window.scrollTo({ top: targetScroll, behavior: "smooth" });
+    } else {
+      setRotationAngle(targetSet === 2 ? 180 : 0);
+      setActiveSet(targetSet);
+    }
   };
-
-  const spinNext = () => {
-    setRotationAngle((prev) => prev + 60);
-  };
-
-  const totalDishes = DISHES.length;
-  const angleStep = 360 / totalDishes; // 60 deg each
 
   return (
     <div
@@ -114,7 +130,7 @@ export default function Plate() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Ambient Radial Golden Glow */}
+      {/* Ambient Radial Golden Aura */}
       <div className="revolving-ambient-glow" aria-hidden="true" />
 
       {/* Orbit Track Indicator Ring */}
@@ -136,18 +152,22 @@ export default function Plate() {
           className="revolving-hub"
           style={{
             transform: `rotate(${rotationAngle}deg)`,
-            transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+            transition: "transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
-          {DISHES.map((dish, i) => {
-            const currentItemAngle = i * angleStep;
+          {DISHES.map((dish) => {
+            // Calculate effective position angle on the circle
+            const effectiveAngle = (dish.baseAngle + rotationAngle) % 360;
+            const normalized = (effectiveAngle + 360) % 360;
+            // Visible if in the left arc (between 80deg and 280deg)
+            const isVisibleOnArc = normalized >= 80 && normalized <= 280;
 
             return (
               <div
                 key={dish.id}
-                className="revolving-dish-spoke"
+                className={`revolving-dish-spoke ${isVisibleOnArc ? "is-arc-visible" : "is-arc-hidden"}`}
                 style={{
-                  transform: `rotate(${currentItemAngle}deg) translate(var(--disk-radius)) rotate(-${currentItemAngle}deg)`,
+                  transform: `rotate(${dish.baseAngle}deg) translate(var(--disk-radius)) rotate(-${dish.baseAngle}deg)`,
                 }}
               >
                 {/* Counter-rotate the dish so it stays upright while carousel spins */}
@@ -155,7 +175,7 @@ export default function Plate() {
                   className="revolving-dish-unit"
                   style={{
                     transform: `rotate(-${rotationAngle}deg)`,
-                    transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+                    transition: "transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease",
                   }}
                 >
                   <div className="dish-wheel-frame">
@@ -186,25 +206,37 @@ export default function Plate() {
         </div>
       </div>
 
-      {/* Manual Spin Quick Controls & Indicator */}
+      {/* Dynamic Carousel Controller & Set Indicator */}
       <div className="revolving-controls-bar">
         <button
           type="button"
-          className="disk-nav-btn prev glass"
-          onClick={spinPrev}
-          aria-label="Rotate previous dishes"
+          className={`disk-nav-btn prev glass ${activeSet === 1 ? "is-disabled" : ""}`}
+          onClick={() => toggleSet(1)}
+          aria-label="View first 3 dishes"
         >
           ‹
         </button>
+
         <div className="disk-hint-pill glass">
           <span className="disk-spin-icon">🎡</span>
-          <span>Scroll down to spin carousel (3 visible at a time)</span>
+          <span className="disk-set-label">
+            {activeSet === 1 ? (
+              <><strong>Dishes 1–3 of 6</strong> • Scroll to spin next 3</>
+            ) : (
+              <><strong>Dishes 4–6 of 6</strong> • Scroll for story &amp; menu</>
+            )}
+          </span>
+          <div className="disk-dots">
+            <span className={`disk-dot ${activeSet === 1 ? "active" : ""}`} onClick={() => toggleSet(1)} />
+            <span className={`disk-dot ${activeSet === 2 ? "active" : ""}`} onClick={() => toggleSet(2)} />
+          </div>
         </div>
+
         <button
           type="button"
-          className="disk-nav-btn next glass"
-          onClick={spinNext}
-          aria-label="Rotate next dishes"
+          className={`disk-nav-btn next glass ${activeSet === 2 ? "is-disabled" : ""}`}
+          onClick={() => toggleSet(2)}
+          aria-label="View next 3 dishes"
         >
           ›
         </button>

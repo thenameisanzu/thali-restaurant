@@ -42,16 +42,18 @@ export default function Home() {
       {/* Floating Apple Liquid Glass Dock Navbar */}
       <Navbar />
 
-      {/* Hero Section (Awwwards-Style Kinetic & 3D Split Layout) */}
-      <section id="top" className="hero hero-split-layout">
-        {/* Floating Ambient Glow Orbs */}
-        <div className="ambient-orbs-container" aria-hidden="true">
-          <div className="ambient-orb orb-1" />
-          <div className="ambient-orb orb-2" />
-          <div className="ambient-orb orb-3" />
-        </div>
+      {/* Hero Section (Sticky Pinned Stage: 3 dishes default, scroll reveals next 3 dishes, then glides to next section) */}
+      <div id="hero-stage" className="hero-scroll-stage">
+        <div className="hero-sticky-frame">
+          <section id="top" className="hero hero-split-layout">
+            {/* Floating Ambient Glow Orbs */}
+            <div className="ambient-orbs-container" aria-hidden="true">
+              <div className="ambient-orb orb-1" />
+              <div className="ambient-orb orb-2" />
+              <div className="ambient-orb orb-3" />
+            </div>
 
-        <div className="hero-split-grid wrap">
+            <div className="hero-split-grid wrap">
           {/* Left Column: Editorial Brand & Interactive Triggers */}
           <div className="hero-left-column">
             <div className="hero-meta-badges animate-fade-down">
@@ -141,6 +143,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+    </div>
+  </div>
 
       {/* Kinetic Typography Marquee Ribbon 1 */}
       <MarqueeRibbon

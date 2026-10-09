@@ -792,15 +792,48 @@ a {
 }
 
 /* =========================================
+   Hero Sticky Scroll Stage & Pinned Carousel
+   ========================================= */
+.hero-scroll-stage {
+  position: relative;
+  height: 170vh; /* Scroll room for rotating through dishes before advancing */
+  width: 100%;
+}
+
+.hero-sticky-frame {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  min-height: 620px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-x: clip;
+}
+
+@media (max-width: 899px) {
+  .hero-scroll-stage {
+    height: 145vh;
+  }
+}
+
+/* =========================================
    Revolving Carousel Disk Wheel (6 Dishes, 3 Visible on Arc)
    ========================================= */
 :root {
-  --disk-radius: 155px;
+  --disk-radius: 175px;
 }
 
 @media (min-width: 900px) {
   :root {
-    --disk-radius: 205px;
+    --disk-radius: 250px;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --disk-radius: 280px;
   }
 }
 
@@ -813,7 +846,7 @@ a {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px 8px;
+  padding: 10px 0;
   user-select: none;
 }
 
@@ -826,24 +859,24 @@ a {
 
 .revolving-ambient-glow {
   position: absolute;
-  top: 46%;
-  right: 15%;
-  transform: translate(0, -50%);
-  width: 440px;
-  height: 440px;
+  top: 50%;
+  right: 0;
+  transform: translate(30%, -50%);
+  width: 480px;
+  height: 480px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(212, 163, 89, 0.26) 0%, rgba(30, 90, 46, 0.16) 50%, transparent 75%);
-  filter: blur(50px);
+  background: radial-gradient(circle, rgba(212, 163, 89, 0.28) 0%, rgba(30, 90, 46, 0.16) 50%, transparent 75%);
+  filter: blur(55px);
   pointer-events: none;
   z-index: 0;
   animation: glowPulse 5s infinite alternate ease-in-out;
 }
 
-/* Orbit Track Ring */
+/* Orbit Track Ring (Positioned at right edge) */
 .orbit-track-ring {
   position: absolute;
-  top: 46%;
-  right: calc(var(--disk-radius) * -0.2);
+  top: 50%;
+  right: calc(var(--disk-radius) * -0.55);
   transform: translateY(-50%);
   width: calc(var(--disk-radius) * 2);
   height: calc(var(--disk-radius) * 2);
@@ -855,9 +888,7 @@ a {
 
 @media (max-width: 899px) {
   .orbit-track-ring {
-    right: auto;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    right: calc(var(--disk-radius) * -0.45);
   }
 }
 
@@ -871,12 +902,12 @@ a {
   justify-content: center;
   transform-style: preserve-3d;
   z-index: 2;
-  margin-right: calc(var(--disk-radius) * -0.2);
+  margin-right: calc(var(--disk-radius) * -0.55);
 }
 
 @media (max-width: 899px) {
   .revolving-disk-stage {
-    margin-right: 0;
+    margin-right: calc(var(--disk-radius) * -0.45);
   }
 }
 
@@ -899,12 +930,25 @@ a {
   align-items: center;
   justify-content: center;
   transform-origin: 0 0;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.revolving-dish-spoke.is-arc-hidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.revolving-dish-spoke.is-arc-visible {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
 }
 
 .revolving-dish-unit {
   position: absolute;
-  width: min(130px, 34vw);
-  height: min(130px, 34vw);
+  width: min(130px, 32vw);
+  height: min(130px, 32vw);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -915,8 +959,15 @@ a {
 
 @media (min-width: 900px) {
   .revolving-dish-unit {
-    width: 170px;
-    height: 170px;
+    width: 175px;
+    height: 175px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .revolving-dish-unit {
+    width: 195px;
+    height: 195px;
   }
 }
 
@@ -927,18 +978,18 @@ a {
   overflow: hidden;
   position: relative;
   box-shadow: 
-    0 20px 48px -6px rgba(18, 56, 28, 0.35),
+    0 22px 50px -6px rgba(18, 56, 28, 0.4),
     0 0 0 4.5px rgba(255, 255, 255, 0.98),
-    0 0 0 7.5px rgba(212, 163, 89, 0.7);
+    0 0 0 8px rgba(212, 163, 89, 0.75);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .dish-wheel-frame:hover {
-  transform: scale(1.06);
+  transform: scale(1.07);
   box-shadow: 
-    0 26px 56px -6px rgba(18, 56, 28, 0.45),
-    0 0 0 5px #ffffff,
-    0 0 0 9px var(--gold);
+    0 28px 60px -6px rgba(18, 56, 28, 0.5),
+    0 0 0 5.5px #ffffff,
+    0 0 0 10px var(--gold);
 }
 
 .dish-wheel-img {
@@ -952,24 +1003,24 @@ a {
 
 .revolving-label-pill {
   position: absolute;
-  bottom: -6px;
+  bottom: -8px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   font-weight: 700;
   white-space: nowrap;
-  padding: 3px 9px;
+  padding: 4px 11px;
   border-radius: 999px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
   z-index: 5;
   pointer-events: none;
 }
 
 @media (min-width: 900px) {
   .revolving-label-pill {
-    font-size: 0.74rem;
-    padding: 4px 12px;
-    bottom: -8px;
+    font-size: 0.78rem;
+    padding: 5px 14px;
+    bottom: -10px;
   }
 }
 
@@ -978,15 +1029,15 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-top: 24px;
+  margin-top: 26px;
   z-index: 5;
 }
 
 .disk-nav-btn {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 800;
   color: var(--g);
   cursor: pointer;
@@ -995,29 +1046,56 @@ a {
   justify-content: center;
   line-height: 1;
   padding: 0;
-  transition: transform 0.15s ease, background 0.15s ease;
+  transition: transform 0.15s ease, background 0.15s ease, opacity 0.2s ease;
   border: 1px solid rgba(255, 255, 255, 0.9);
 }
 
-.disk-nav-btn:hover {
+.disk-nav-btn:hover:not(.is-disabled) {
   background: var(--g);
   color: #ffffff;
   transform: scale(1.12);
 }
 
-.disk-nav-btn:active {
+.disk-nav-btn.is-disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.disk-nav-btn:active:not(.is-disabled) {
   transform: scale(0.92);
 }
 
 .disk-hint-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
+  gap: 8px;
+  padding: 6px 16px;
   border-radius: 999px;
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--g-dark);
+}
+
+.disk-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 4px;
+}
+
+.disk-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(30, 90, 46, 0.25);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.disk-dot.active {
+  width: 18px;
+  border-radius: 999px;
+  background: var(--g);
 }
 
 .disk-spin-icon {
