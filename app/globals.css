@@ -561,7 +561,6 @@ a {
   position: relative;
   z-index: 2;
   padding-block: 0;
-  width: 100%;
 }
 
 @media (min-width: 900px) {
@@ -571,26 +570,8 @@ a {
   }
 
   .hero-split-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 36px;
-    max-width: 1380px;
-    margin: 0 auto;
-    width: 100%;
-  }
-}
-
-.hero-right-column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-@media (min-width: 900px) {
-  .hero-right-column {
-    align-items: flex-end;
-    justify-content: center;
+    grid-template-columns: 1.12fr 0.88fr;
+    gap: 48px;
   }
 }
 
@@ -664,12 +645,13 @@ a {
 }
 
 .badge-star {
-  background: #fbbc04;
-  color: #202124;
-  padding: 1px 6px;
-  border-radius: 4px;
-  font-weight: 700;
+  background: linear-gradient(135deg, #e5a017, #b8820c);
+  color: #ffffff;
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-weight: 800;
   font-size: 0.76rem;
+  box-shadow: 0 2px 6px rgba(184, 130, 12, 0.35);
 }
 
 .kicker {
@@ -838,101 +820,158 @@ a {
 }
 
 /* =========================================
-   Revolving Carousel Disk Wheel (Clean Right-Aligned Showcase Arc)
+   Centerpiece Platter + Orbiting Satellites Showcase
    ========================================= */
 :root {
-  --disk-radius: 145px;
+  --satellite-radius: 155px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 900px) {
   :root {
-    --disk-radius: 195px;
+    --satellite-radius: 205px;
   }
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 1200px) {
   :root {
-    --disk-radius: 260px;
+    --satellite-radius: 228px;
   }
 }
 
-@media (min-width: 1300px) {
-  :root {
-    --disk-radius: 290px;
-  }
-}
-
-.revolving-disk-viewport {
+.hero-dish-showcase {
   position: relative;
   width: 100%;
-  max-width: 100%;
-  min-height: 440px;
+  max-width: 580px;
+  min-height: 490px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 10px 0 20px;
+  padding: 10px 0;
   user-select: none;
-  margin-left: auto;
 }
 
-@media (min-width: 768px) {
-  .revolving-disk-viewport {
-    min-height: 480px;
-    align-items: flex-end;
+@media (min-width: 900px) {
+  .hero-dish-showcase {
+    min-height: 530px;
   }
 }
 
-@media (min-width: 1025px) {
-  .revolving-disk-viewport {
-    min-height: 540px;
-    align-items: flex-end;
-    padding-right: 0;
-  }
-}
-
-.revolving-ambient-glow {
+.showcase-ambient-glow {
   position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translate(25%, -50%);
-  width: 500px;
-  height: 500px;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 480px;
+  height: 480px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(212, 163, 89, 0.35) 0%, rgba(30, 90, 46, 0.18) 50%, transparent 75%);
+  background: radial-gradient(circle, rgba(212, 163, 89, 0.32) 0%, rgba(30, 90, 46, 0.16) 55%, transparent 75%);
   filter: blur(55px);
   pointer-events: none;
   z-index: 0;
   animation: glowPulse 5s infinite alternate ease-in-out;
 }
 
-/* 3D Revolving Stage (Clean right alignment) */
-.revolving-disk-stage {
+/* 3D Showcase Stage */
+.showcase-stage {
   position: relative;
-  width: calc(var(--disk-radius) * 2);
-  height: calc(var(--disk-radius) * 2);
+  width: calc(var(--satellite-radius) * 2 + 120px);
+  height: calc(var(--satellite-radius) * 2 + 120px);
   display: flex;
   align-items: center;
   justify-content: center;
   transform-style: preserve-3d;
   z-index: 2;
-  margin-right: calc(var(--disk-radius) * -0.52);
 }
 
-@media (max-width: 767px) {
-  .revolving-disk-stage {
-    margin-right: 0; /* Centered nicely on mobile screens */
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1024px) {
-  .revolving-disk-stage {
-    margin-right: calc(var(--disk-radius) * -0.32); /* Balanced on iPad */
-  }
-}
-
-.revolving-hub {
+/* CENTERPIECE DISH (Unlimited Kerala Sadya) */
+.centerpiece-dish-wrapper {
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  height: 180px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 900px) {
+  .centerpiece-dish-wrapper {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .centerpiece-dish-wrapper {
+    width: 236px;
+    height: 236px;
+  }
+}
+
+.centerpiece-frame {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 
+    0 24px 60px -8px rgba(18, 56, 28, 0.45),
+    0 0 0 5px rgba(255, 255, 255, 0.98),
+    0 0 0 9px var(--gold);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.centerpiece-frame:hover {
+  transform: scale(1.04);
+  box-shadow: 
+    0 30px 70px -8px rgba(18, 56, 28, 0.55),
+    0 0 0 6px #ffffff,
+    0 0 0 11px var(--gold);
+}
+
+.centerpiece-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  border-radius: 50%;
+}
+
+.centerpiece-label-pill {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--g-dark);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  z-index: 12;
+  pointer-events: none;
+  border: 1px solid rgba(212, 163, 89, 0.6);
+}
+
+.center-pill-star {
+  color: #e5a017;
+}
+
+/* SATELLITE DISHES ORBIT */
+.satellite-orbit-hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   width: 0;
   height: 0;
   display: flex;
@@ -942,7 +981,7 @@ a {
   will-change: transform;
 }
 
-.revolving-dish-spoke {
+.satellite-dish-spoke {
   position: absolute;
   width: 0;
   height: 0;
@@ -950,91 +989,56 @@ a {
   align-items: center;
   justify-content: center;
   transform-origin: 0 0;
-  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.revolving-dish-spoke.is-arc-hidden {
-  opacity: 0;
-  pointer-events: none;
-  visibility: hidden;
-}
-
-.revolving-dish-spoke.is-arc-visible {
-  opacity: 1;
-  pointer-events: auto;
-  visibility: visible;
-}
-
-.revolving-dish-unit {
+.satellite-dish-unit {
   position: absolute;
-  width: min(115px, 28vw);
-  height: min(115px, 28vw);
+  width: min(88px, 24vw);
+  height: min(88px, 24vw);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   transform: translate(-50%, -50%);
-  will-change: transform, opacity;
-  z-index: 4;
+  will-change: transform;
 }
 
-@media (min-width: 768px) {
-  .revolving-dish-unit {
-    width: 140px;
-    height: 140px;
+@media (min-width: 900px) {
+  .satellite-dish-unit {
+    width: 104px;
+    height: 104px;
   }
 }
 
-@media (min-width: 1025px) {
-  .revolving-dish-unit {
-    width: 155px;
-    height: 155px;
+@media (min-width: 1200px) {
+  .satellite-dish-unit {
+    width: 112px;
+    height: 112px;
   }
 }
 
-/* Active Center Hero Dish Highlight */
-.revolving-dish-unit.is-hero-center {
-  z-index: 10;
-}
-
-.revolving-dish-unit.is-hero-center .dish-wheel-frame {
-  box-shadow: 
-    0 26px 56px -6px rgba(18, 56, 28, 0.48),
-    0 0 0 5px #ffffff,
-    0 0 0 9.5px var(--gold),
-    0 0 35px rgba(212, 163, 89, 0.45);
-}
-
-.revolving-dish-unit.is-hero-center .revolving-label-pill {
-  background: rgba(18, 56, 28, 0.92);
-  color: #ffffff;
-  border-color: rgba(212, 163, 89, 0.85);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-  transform: translateX(-50%) scale(1.05);
-}
-
-.dish-wheel-frame {
+.satellite-wheel-frame {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   overflow: hidden;
   position: relative;
   box-shadow: 
-    0 18px 42px -6px rgba(18, 56, 28, 0.32),
-    0 0 0 4px rgba(255, 255, 255, 0.95),
-    0 0 0 7px rgba(212, 163, 89, 0.65);
+    0 12px 30px -4px rgba(18, 56, 28, 0.35),
+    0 0 0 3px rgba(255, 255, 255, 0.98),
+    0 0 0 5.5px rgba(212, 163, 89, 0.75);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.dish-wheel-frame:hover {
-  transform: scale(1.06);
+.satellite-wheel-frame:hover {
+  transform: scale(1.08);
   box-shadow: 
-    0 24px 52px -6px rgba(18, 56, 28, 0.42),
-    0 0 0 5px #ffffff,
-    0 0 0 9px var(--gold);
+    0 16px 36px -4px rgba(18, 56, 28, 0.48),
+    0 0 0 4px #ffffff,
+    0 0 0 7px var(--gold);
 }
 
-.dish-wheel-img {
+.satellite-wheel-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1043,60 +1047,44 @@ a {
   border-radius: 50%;
 }
 
-.revolving-label-pill {
+.satellite-label-pill {
   position: absolute;
-  bottom: -9px;
+  bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 700;
   white-space: nowrap;
-  padding: 3.5px 10px;
+  padding: 2px 7px;
   border-radius: 999px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16);
   z-index: 5;
   pointer-events: none;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
-@media (min-width: 768px) {
-  .revolving-label-pill {
-    font-size: 0.74rem;
-    padding: 4px 12px;
-    bottom: -10px;
+@media (min-width: 900px) {
+  .satellite-label-pill {
+    font-size: 0.68rem;
+    padding: 3px 9px;
+    bottom: -8px;
   }
 }
 
-@media (min-width: 1025px) {
-  .revolving-label-pill {
-    font-size: 0.78rem;
-    padding: 5px 14px;
-    bottom: -11px;
-  }
-}
-
-/* Controls Bar (Safely positioned with zero overlap) */
-.revolving-controls-bar {
+/* Controls Bar (Clean bottom placement with zero overlap) */
+.showcase-controls-bar {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-top: 38px;
-  z-index: 15;
+  margin-top: 32px;
+  z-index: 10;
   position: relative;
 }
 
-@media (max-width: 767px) {
-  .revolving-controls-bar {
-    margin-top: 24px;
-    gap: 8px;
-  }
-}
-
-.disk-nav-btn {
-  width: 36px;
-  height: 36px;
+.showcase-nav-btn {
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 800;
   color: var(--g);
   cursor: pointer;
@@ -1105,72 +1093,32 @@ a {
   justify-content: center;
   line-height: 1;
   padding: 0;
-  transition: transform 0.15s ease, background 0.15s ease, opacity 0.2s ease;
+  transition: transform 0.15s ease, background 0.15s ease;
   border: 1px solid rgba(255, 255, 255, 0.9);
 }
 
-.disk-nav-btn:hover:not(.is-disabled) {
+.showcase-nav-btn:hover {
   background: var(--g);
   color: #ffffff;
   transform: scale(1.12);
 }
 
-.disk-nav-btn.is-disabled {
-  opacity: 0.45;
-  cursor: default;
-}
-
-.disk-nav-btn:active:not(.is-disabled) {
+.showcase-nav-btn:active {
   transform: scale(0.92);
 }
 
-.disk-hint-pill {
+.showcase-hint-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 7px 18px;
+  padding: 6px 16px;
   border-radius: 999px;
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--g-dark);
 }
 
-@media (max-width: 767px) {
-  .disk-hint-pill {
-    font-size: 0.72rem;
-    padding: 6px 12px;
-  }
-
-  .disk-nav-btn {
-    width: 30px;
-    height: 30px;
-    font-size: 1.1rem;
-  }
-}
-
-.disk-dots {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  margin-left: 4px;
-}
-
-.disk-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(30, 90, 46, 0.25);
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.disk-dot.active {
-  width: 18px;
-  border-radius: 999px;
-  background: var(--g);
-}
-
-.disk-spin-icon {
+.showcase-spin-icon {
   animation: spinIcon 8s linear infinite;
 }
 
