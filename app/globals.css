@@ -819,60 +819,73 @@ a {
 }
 
 /* =========================================
-   Revolving Carousel Disk Wheel (9 Dishes, 4–5 Visible on Arc)
+   Revolving Carousel Disk Wheel (Clean Showcase Arc)
    ========================================= */
 :root {
-  --disk-radius: 185px;
+  --disk-radius: 145px;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 768px) {
   :root {
-    --disk-radius: 275px;
+    --disk-radius: 195px;
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1025px) {
   :root {
-    --disk-radius: 310px;
+    --disk-radius: 250px;
+  }
+}
+
+@media (min-width: 1300px) {
+  :root {
+    --disk-radius: 280px;
   }
 }
 
 .revolving-disk-viewport {
   position: relative;
   width: 100%;
-  max-width: 620px;
-  min-height: 500px;
+  max-width: 600px;
+  min-height: 440px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 10px 0;
+  padding: 10px 0 20px;
   user-select: none;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 768px) {
+  .revolving-disk-viewport {
+    min-height: 480px;
+  }
+}
+
+@media (min-width: 1025px) {
   .revolving-disk-viewport {
     min-height: 540px;
     align-items: flex-end;
+    padding-right: 15px;
   }
 }
 
 .revolving-ambient-glow {
   position: absolute;
-  top: 50%;
+  top: 48%;
   right: 0;
-  transform: translate(35%, -50%);
-  width: 520px;
-  height: 520px;
+  transform: translate(20%, -50%);
+  width: 460px;
+  height: 460px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(212, 163, 89, 0.32) 0%, rgba(30, 90, 46, 0.16) 50%, transparent 75%);
-  filter: blur(60px);
+  filter: blur(55px);
   pointer-events: none;
   z-index: 0;
   animation: glowPulse 5s infinite alternate ease-in-out;
 }
 
-/* 3D Revolving Stage (Shifted further right, ring hidden) */
+/* 3D Revolving Stage (Clean crescent arc with responsive right offsets) */
 .revolving-disk-stage {
   position: relative;
   width: calc(var(--disk-radius) * 2);
@@ -882,12 +895,18 @@ a {
   justify-content: center;
   transform-style: preserve-3d;
   z-index: 2;
-  margin-right: calc(var(--disk-radius) * -0.72);
+  margin-right: calc(var(--disk-radius) * -0.32);
 }
 
-@media (max-width: 899px) {
+@media (max-width: 767px) {
   .revolving-disk-stage {
-    margin-right: calc(var(--disk-radius) * -0.62);
+    margin-right: 0; /* Centered nicely on mobile screens */
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .revolving-disk-stage {
+    margin-right: calc(var(--disk-radius) * -0.22); /* Balanced on iPad */
   }
 }
 
@@ -910,7 +929,7 @@ a {
   align-items: center;
   justify-content: center;
   transform-origin: 0 0;
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .revolving-dish-spoke.is-arc-hidden {
@@ -927,28 +946,50 @@ a {
 
 .revolving-dish-unit {
   position: absolute;
-  width: min(120px, 30vw);
-  height: min(120px, 30vw);
+  width: min(115px, 28vw);
+  height: min(115px, 28vw);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   transform: translate(-50%, -50%);
-  will-change: transform;
+  will-change: transform, opacity;
+  z-index: 4;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 768px) {
+  .revolving-dish-unit {
+    width: 140px;
+    height: 140px;
+  }
+}
+
+@media (min-width: 1025px) {
   .revolving-dish-unit {
     width: 155px;
     height: 155px;
   }
 }
 
-@media (min-width: 1200px) {
-  .revolving-dish-unit {
-    width: 168px;
-    height: 168px;
-  }
+/* Active Center Hero Dish Highlight */
+.revolving-dish-unit.is-hero-center {
+  z-index: 10;
+}
+
+.revolving-dish-unit.is-hero-center .dish-wheel-frame {
+  box-shadow: 
+    0 26px 56px -6px rgba(18, 56, 28, 0.48),
+    0 0 0 5px #ffffff,
+    0 0 0 9.5px var(--gold),
+    0 0 35px rgba(212, 163, 89, 0.45);
+}
+
+.revolving-dish-unit.is-hero-center .revolving-label-pill {
+  background: rgba(18, 56, 28, 0.92);
+  color: #ffffff;
+  border-color: rgba(212, 163, 89, 0.85);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  transform: translateX(-50%) scale(1.05);
 }
 
 .dish-wheel-frame {
@@ -958,18 +999,18 @@ a {
   overflow: hidden;
   position: relative;
   box-shadow: 
-    0 22px 50px -6px rgba(18, 56, 28, 0.4),
-    0 0 0 4.5px rgba(255, 255, 255, 0.98),
-    0 0 0 8px rgba(212, 163, 89, 0.75);
+    0 18px 42px -6px rgba(18, 56, 28, 0.32),
+    0 0 0 4px rgba(255, 255, 255, 0.95),
+    0 0 0 7px rgba(212, 163, 89, 0.65);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .dish-wheel-frame:hover {
-  transform: scale(1.07);
+  transform: scale(1.06);
   box-shadow: 
-    0 28px 60px -6px rgba(18, 56, 28, 0.5),
-    0 0 0 5.5px #ffffff,
-    0 0 0 10px var(--gold);
+    0 24px 52px -6px rgba(18, 56, 28, 0.42),
+    0 0 0 5px #ffffff,
+    0 0 0 9px var(--gold);
 }
 
 .dish-wheel-img {
@@ -983,41 +1024,58 @@ a {
 
 .revolving-label-pill {
   position: absolute;
-  bottom: -8px;
+  bottom: -9px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 700;
   white-space: nowrap;
-  padding: 4px 11px;
+  padding: 3.5px 10px;
   border-radius: 999px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
   z-index: 5;
   pointer-events: none;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 768px) {
   .revolving-label-pill {
-    font-size: 0.78rem;
-    padding: 5px 14px;
+    font-size: 0.74rem;
+    padding: 4px 12px;
     bottom: -10px;
   }
 }
 
-/* Controls Bar */
+@media (min-width: 1025px) {
+  .revolving-label-pill {
+    font-size: 0.78rem;
+    padding: 5px 14px;
+    bottom: -11px;
+  }
+}
+
+/* Controls Bar (Safely positioned with zero overlap) */
 .revolving-controls-bar {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-top: 26px;
-  z-index: 5;
+  margin-top: 38px;
+  z-index: 15;
+  position: relative;
+}
+
+@media (max-width: 767px) {
+  .revolving-controls-bar {
+    margin-top: 24px;
+    gap: 8px;
+  }
 }
 
 .disk-nav-btn {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 800;
   color: var(--g);
   cursor: pointer;
@@ -1049,11 +1107,24 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 16px;
+  padding: 7px 18px;
   border-radius: 999px;
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--g-dark);
+}
+
+@media (max-width: 767px) {
+  .disk-hint-pill {
+    font-size: 0.72rem;
+    padding: 6px 12px;
+  }
+
+  .disk-nav-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 1.1rem;
+  }
 }
 
 .disk-dots {

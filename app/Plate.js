@@ -8,7 +8,7 @@ const DISHES = [
     img: "/hero_thali.jpg",
     tag: "🍛 Unlimited Sadya",
     desc: "18+ Authentic Kerala curries & hot refills",
-    baseAngle: 180, // Center Left
+    baseAngle: 180, // Index 0 (Center initial)
   },
   {
     id: "dosa",
@@ -16,7 +16,7 @@ const DISHES = [
     img: "/masala_dosa.jpg",
     tag: "🥞 Crispy Ghee Roast",
     desc: "Golden roasted with pure ghee & chutneys",
-    baseAngle: 140, // Upper Left
+    baseAngle: 125, // Index 1 (Top initial)
   },
   {
     id: "biryani",
@@ -24,7 +24,7 @@ const DISHES = [
     img: "/chicken_biryani.jpg",
     tag: "🍗 Malabar Biryani",
     desc: "Fragrant kaima rice with tender spiced chicken",
-    baseAngle: 220, // Lower Left
+    baseAngle: 235, // Index 2 (Bottom initial)
   },
   {
     id: "beef-roast",
@@ -32,7 +32,7 @@ const DISHES = [
     img: "/beef_roast.jpg",
     tag: "🥩 Porotta & Beef Fry",
     desc: "Layered flaky porotta with sizzling coconut beef roast",
-    baseAngle: 100, // Top Arc
+    baseAngle: 70, // Index 3
   },
   {
     id: "fish-curry",
@@ -40,7 +40,7 @@ const DISHES = [
     img: "/fish_curry.jpg",
     tag: "🐟 Kottayam Fish Curry",
     desc: "Spicy red kudampuli fish curry with tapioca kappa",
-    baseAngle: 260, // Bottom Arc
+    baseAngle: 290, // Index 4
   },
   {
     id: "chicken-dosa",
@@ -48,7 +48,7 @@ const DISHES = [
     img: "/chicken_dosa.jpg",
     tag: "🥘 Non-Veg Dosa",
     desc: "Crisp dosa stuffed with spicy chicken roast",
-    baseAngle: 60, // Top Right Arc
+    baseAngle: 15, // Index 5
   },
   {
     id: "appam-stew",
@@ -56,7 +56,7 @@ const DISHES = [
     img: "/appam_stew.jpg",
     tag: "🍲 Appam & Stew",
     desc: "Lacy soft appams with creamy coconut milk stew",
-    baseAngle: 300, // Bottom Right Arc
+    baseAngle: 345, // Index 6
   },
   {
     id: "payasam",
@@ -64,7 +64,7 @@ const DISHES = [
     img: "/palada_payasam.jpg",
     tag: "✨ Daily Sweet",
     desc: "Slow-simmered milk payasam with tender ada",
-    baseAngle: 20, // Rotating entry
+    baseAngle: 200, // Index 7
   },
   {
     id: "sambar",
@@ -72,13 +72,25 @@ const DISHES = [
     img: "/sambar.jpg",
     tag: "🍲 Homestyle Curry",
     desc: "Simmered toor dal with fresh drumsticks & spices",
-    baseAngle: 340, // Rotating entry
+    baseAngle: 255, // Index 8
   },
 ];
+
+// Spaced evenly at 40° intervals: [180, 140, 220, 100, 260, 60, 300, 20, 340]
+const SPACED_DISHES = DISHES.map((dish, idx) => {
+  const angleMap = [180, 125, 235, 70, 290, 15, 345, 200, 255];
+  // Uniform 40° spacing around 360°
+  const uniformAngles = [180, 140, 220, 100, 260, 60, 300, 20, 340];
+  return {
+    ...dish,
+    baseAngle: uniformAngles[idx],
+  };
+});
 
 export default function Plate() {
   const [rotationAngle, setRotationAngle] = useState(0);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [activeDishName, setActiveDishName] = useState(SPACED_DISHES[0].n);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -93,11 +105,12 @@ export default function Plate() {
             const totalScrollable = stage.offsetHeight - window.innerHeight;
             if (totalScrollable > 0) {
               const progress = Math.min(Math.max(-rect.top / totalScrollable, 0), 1);
-              // Rotate continuously through the 9 dishes across the scroll
-              setRotationAngle(progress * 360);
+              // Rotate by 360° across the pinned scroll
+              const rot = progress * 360;
+              setRotationAngle(rot);
             }
           } else {
-            const rot = (window.scrollY * 0.45) % 360;
+            const rot = (window.scrollY * 0.35) % 360;
             setRotationAngle(rot);
           }
           ticking = false;
@@ -111,6 +124,25 @@ export default function Plate() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Find the currently featured active center dish
+  useEffect(() => {
+    let closestDish = SPACED_DISHES[0];
+    let minDiff = 360;
+
+    SPACED_DISHES.forEach((dish) => {
+      const currentAngle = (((dish.baseAngle + rotationAngle) % 360) + 360) % 360;
+      const diff = Math.abs(currentAngle - 180);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestDish = dish;
+      }
+    });
+
+    if (closestDish) {
+      setActiveDishName(closestDish.n);
+    }
+  }, [rotationAngle]);
+
   // 3D Magnetic Mouse Tilt
   const handleMouseMove = (e) => {
     if (!containerRef.current) return;
@@ -120,8 +152,8 @@ export default function Plate() {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((y - centerY) / centerY) * -6;
-    const rotateY = ((x - centerX) / centerX) * 6;
+    const rotateX = ((y - centerY) / centerY) * -5;
+    const rotateY = ((x - centerX) / centerX) * 5;
 
     setTilt({ x: rotateX, y: rotateY });
   };
@@ -160,15 +192,31 @@ export default function Plate() {
           className="revolving-hub"
           style={{
             transform: `rotate(${rotationAngle}deg)`,
-            transition: "transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)",
+            transition: "transform 0.18s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
-          {DISHES.map((dish) => {
+          {SPACED_DISHES.map((dish) => {
             // Effective position angle on the circle
-            const effectiveAngle = (dish.baseAngle + rotationAngle) % 360;
-            const normalized = (effectiveAngle + 360) % 360;
-            // 4 to 5 dishes visible along the primary arc (between 50deg and 310deg)
-            const isVisibleOnArc = normalized >= 50 && normalized <= 310;
+            const effectiveAngle = (((dish.baseAngle + rotationAngle) % 360) + 360) % 360;
+            const diffFromCenter = Math.abs(effectiveAngle - 180);
+
+            // Active center hero dish
+            const isHeroCenter = diffFromCenter <= 24;
+            // Adjacent visible dishes on the clean 3-dish arc
+            const isVisibleOnArc = diffFromCenter <= 68;
+
+            // Compute scale & opacity smoothly based on distance from center (180deg)
+            const scaleFactor = isHeroCenter
+              ? 1.16
+              : isVisibleOnArc
+              ? 0.88
+              : 0.6;
+
+            const opacityFactor = isHeroCenter
+              ? 1
+              : isVisibleOnArc
+              ? 0.85
+              : 0;
 
             return (
               <div
@@ -180,10 +228,12 @@ export default function Plate() {
               >
                 {/* Counter-rotate the dish so it stays upright while carousel spins */}
                 <div
-                  className="revolving-dish-unit"
+                  className={`revolving-dish-unit ${isHeroCenter ? "is-hero-center" : "is-flank-dish"}`}
                   style={{
-                    transform: `rotate(-${rotationAngle}deg)`,
-                    transition: "transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease",
+                    transform: `rotate(-${rotationAngle}deg) scale(${scaleFactor})`,
+                    opacity: opacityFactor,
+                    transition:
+                      "transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease",
                   }}
                 >
                   <div className="dish-wheel-frame">
@@ -194,11 +244,13 @@ export default function Plate() {
                     />
                     <div className="wheel-specular-glare" aria-hidden="true" />
 
-                    {/* Steaming Hot Smoke Vapor */}
-                    <div className="wheel-steam-container" aria-hidden="true">
-                      <span className="wheel-steam ws1" />
-                      <span className="wheel-steam ws2" />
-                    </div>
+                    {/* Steaming Hot Smoke Vapor on Active Center Dish */}
+                    {isHeroCenter && (
+                      <div className="wheel-steam-container" aria-hidden="true">
+                        <span className="wheel-steam ws1" />
+                        <span className="wheel-steam ws2" />
+                      </div>
+                    )}
 
                     <div className="wheel-orbital-ring ring-satellite" aria-hidden="true" />
                   </div>
@@ -214,13 +266,13 @@ export default function Plate() {
         </div>
       </div>
 
-      {/* Dynamic 5-Dish Visible Controller & Hint */}
+      {/* Dynamic Dedicated Controls Bar (Zero Overlap with Plates) */}
       <div className="revolving-controls-bar">
         <button
           type="button"
           className="disk-nav-btn prev glass"
           onClick={() => spinStep(-1)}
-          aria-label="Previous dish"
+          aria-label="Previous specialty"
         >
           ‹
         </button>
@@ -228,7 +280,7 @@ export default function Plate() {
         <div className="disk-hint-pill glass">
           <span className="disk-spin-icon">🎡</span>
           <span className="disk-set-label">
-            <strong>9 House Specialties</strong> • Scroll to rotate wheel
+            <strong>{activeDishName}</strong> • Scroll to rotate
           </span>
         </div>
 
@@ -236,7 +288,7 @@ export default function Plate() {
           type="button"
           className="disk-nav-btn next glass"
           onClick={() => spinStep(1)}
-          aria-label="Next dish"
+          aria-label="Next specialty"
         >
           ›
         </button>
