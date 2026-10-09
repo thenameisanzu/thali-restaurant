@@ -4,6 +4,7 @@ import Menu from "./Menu";
 import OpenNow from "./OpenNow";
 import SpicesBackground from "./SpicesBackground";
 import MarqueeRibbon from "./MarqueeRibbon";
+import Navbar from "./Navbar";
 import { reviewsData } from "./data";
 import {
   SwiggyBrandIcon,
@@ -37,28 +38,8 @@ export default function Home() {
       {/* Floating Ambient Kinetic Spices Canvas */}
       <SpicesBackground />
 
-      {/* Top Floating Navbar (Apple Liquid Glass Dock) */}
-      <header className="nav glass nav-animated">
-        <a className="brand" href="#top">
-          <img
-            src="/logo.png"
-            alt="Thali Restaurant Logo"
-            className="nav-logo-img logo-spin-subtle"
-          />
-          <div className="brand-text">
-            <span className="brand-logo">THALI</span>
-            <span className="brand-sub">Café &amp; Restaurant</span>
-          </div>
-        </a>
-        <nav aria-label="Main Navigation">
-          <a href="#top">Home</a>
-          <a href="#menu">Menu</a>
-          <a href="#story">About</a>
-          <a href="#gallery">Gallery</a>
-          <a href="#visit">Visit</a>
-          <a href="#reserve" className="cta cta-pulse">Reserve</a>
-        </nav>
-      </header>
+      {/* Floating Apple Liquid Glass Dock Navbar */}
+      <Navbar />
 
       {/* Hero Section */}
       <section id="top" className="hero hero-motion">
