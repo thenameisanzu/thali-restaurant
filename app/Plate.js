@@ -23,7 +23,7 @@ export default function Plate() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // 3D Magnetic Mouse Tilt for desktop
+  // 3D Magnetic Mouse Tilt
   const handleMouseMove = (e) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -43,13 +43,13 @@ export default function Plate() {
   };
 
   // Scroll Rotation calculations
-  const rot1 = scrollY * 0.25; // Main plate subtle rotation
-  const rot2 = scrollY * 0.55; // Secondary wheel clockwise
-  const rot3 = -scrollY * 0.45; // Tertiary wheel counter-clockwise
+  const rot1 = scrollY * 0.22; // Main plate
+  const rot2 = scrollY * 0.5;  // Top satellite
+  const rot3 = -scrollY * 0.45; // Bottom satellite
 
   return (
     <div
-      className="kinetic-wheels-showcase"
+      className="kinetic-separated-showcase"
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -57,102 +57,104 @@ export default function Plate() {
       {/* Ambient Radial Golden Glow */}
       <div className="wheels-ambient-glow" aria-hidden="true" />
 
-      {/* 3D Multi-Wheel Stage */}
+      {/* 3D Multi-Wheel Stage (Separated Layout) */}
       <div
-        className="wheels-stage"
+        className="wheels-stage-separated"
         style={{
           transform: `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-          transition: tilt.x === 0 ? "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)" : "transform 0.08s ease-out",
+          transition:
+            tilt.x === 0
+              ? "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)"
+              : "transform 0.08s ease-out",
         }}
       >
         {/* ========================================================
-            WHEEL 1: Main Centerpiece Platter (Authentic Kerala Sadya)
+            PRIMARY WHEEL: Authentic Kerala Thali Platter
            ======================================================== */}
-        <div className="dish-wheel wheel-main">
-          <div
-            className="wheel-disc-rotor"
-            style={{ transform: `rotate(${rot1}deg)` }}
-          >
-            <img
-              src="/hero_thali.jpg"
-              alt="Authentic Kerala Thali Meals at Thali Restaurant Kottayam"
-              className="wheel-img"
-            />
-            <div className="wheel-specular-glare" aria-hidden="true" />
-          </div>
+        <div className="wheel-primary-box">
+          <div className="dish-wheel wheel-main-separated">
+            <div
+              className="wheel-disc-rotor"
+              style={{ transform: `rotate(${rot1}deg)` }}
+            >
+              <img
+                src="/hero_thali.jpg"
+                alt="Authentic Kerala Thali Meals at Thali Restaurant Kottayam"
+                className="wheel-img"
+              />
+              <div className="wheel-specular-glare" aria-hidden="true" />
+            </div>
 
-          {/* Steaming Hot Smoke Vapor */}
-          <div className="wheel-steam-container" aria-hidden="true">
-            <span className="wheel-steam ws1" />
-            <span className="wheel-steam ws2" />
-            <span className="wheel-steam ws3" />
-          </div>
+            {/* Steaming Hot Smoke Vapor */}
+            <div className="wheel-steam-container" aria-hidden="true">
+              <span className="wheel-steam ws1" />
+              <span className="wheel-steam ws2" />
+              <span className="wheel-steam ws3" />
+            </div>
 
-          {/* Kinetic Orbit Rim Ring */}
-          <div className="wheel-orbital-ring ring-main" aria-hidden="true" />
-          
-          <div className="wheel-label-pill glass">
-            <span>🍛 Unlimited Kerala Sadya</span>
+            {/* Kinetic Orbital Ring */}
+            <div className="wheel-orbital-ring ring-main" aria-hidden="true" />
+
+            <div className="wheel-label-pill glass">
+              <span>🍛 Unlimited Kerala Sadya</span>
+            </div>
           </div>
         </div>
 
         {/* ========================================================
-            WHEEL 2: Top-Right Spinning Dish Wheel (Crispy Masala Dosa)
+            RIGHT COLUMN: 2 Separated Satellite Dish Wheels
            ======================================================== */}
-        <div className="dish-wheel wheel-satellite-top">
-          <div
-            className="wheel-disc-rotor"
-            style={{ transform: `rotate(${rot2}deg)` }}
-          >
-            <img
-              src="/masala_dosa.jpg"
-              alt="Crispy Specialty Masala Dosa"
-              className="wheel-img"
-            />
-            <div className="wheel-specular-glare" aria-hidden="true" />
+        <div className="wheels-satellite-column">
+          {/* Satellite Wheel 1: Crispy Masala Dosa */}
+          <div className="dish-wheel wheel-side-item">
+            <div
+              className="wheel-disc-rotor"
+              style={{ transform: `rotate(${rot2}deg)` }}
+            >
+              <img
+                src="/masala_dosa.jpg"
+                alt="Crispy Specialty Masala Dosa"
+                className="wheel-img"
+              />
+              <div className="wheel-specular-glare" aria-hidden="true" />
+            </div>
+
+            <div className="wheel-steam-container" aria-hidden="true">
+              <span className="wheel-steam ws1" />
+              <span className="wheel-steam ws2" />
+            </div>
+
+            <div className="wheel-orbital-ring ring-satellite" aria-hidden="true" />
+
+            <div className="wheel-label-pill glass">
+              <span>🥞 Crispy Ghee Roast</span>
+            </div>
           </div>
 
-          {/* Steam Effect */}
-          <div className="wheel-steam-container" aria-hidden="true">
-            <span className="wheel-steam ws1" />
-            <span className="wheel-steam ws2" />
-          </div>
+          {/* Satellite Wheel 2: Malabar Dum Biryani */}
+          <div className="dish-wheel wheel-side-item">
+            <div
+              className="wheel-disc-rotor"
+              style={{ transform: `rotate(${rot3}deg)` }}
+            >
+              <img
+                src="/chicken_biryani.jpg"
+                alt="Malabar Chicken Dum Biryani"
+                className="wheel-img"
+              />
+              <div className="wheel-specular-glare" aria-hidden="true" />
+            </div>
 
-          {/* Kinetic Orbit Rim Ring */}
-          <div className="wheel-orbital-ring ring-satellite" aria-hidden="true" />
+            <div className="wheel-steam-container" aria-hidden="true">
+              <span className="wheel-steam ws2" />
+              <span className="wheel-steam ws3" />
+            </div>
 
-          <div className="wheel-label-pill glass">
-            <span>🥞 Crispy Ghee Roast</span>
-          </div>
-        </div>
+            <div className="wheel-orbital-ring ring-satellite" aria-hidden="true" />
 
-        {/* ========================================================
-            WHEEL 3: Bottom-Right Spinning Dish Wheel (Malabar Dum Biryani)
-           ======================================================== */}
-        <div className="dish-wheel wheel-satellite-bot">
-          <div
-            className="wheel-disc-rotor"
-            style={{ transform: `rotate(${rot3}deg)` }}
-          >
-            <img
-              src="/chicken_biryani.jpg"
-              alt="Malabar Chicken Dum Biryani"
-              className="wheel-img"
-            />
-            <div className="wheel-specular-glare" aria-hidden="true" />
-          </div>
-
-          {/* Steam Effect */}
-          <div className="wheel-steam-container" aria-hidden="true">
-            <span className="wheel-steam ws2" />
-            <span className="wheel-steam ws3" />
-          </div>
-
-          {/* Kinetic Orbit Rim Ring */}
-          <div className="wheel-orbital-ring ring-satellite" aria-hidden="true" />
-
-          <div className="wheel-label-pill glass">
-            <span>🍗 Malabar Dum Biryani</span>
+            <div className="wheel-label-pill glass">
+              <span>🍗 Malabar Dum Biryani</span>
+            </div>
           </div>
         </div>
       </div>
