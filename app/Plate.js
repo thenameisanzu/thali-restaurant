@@ -1,54 +1,55 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 
-const HERO_DISHES = [
+const DISHES = [
   {
-    id: "main-thali",
+    id: "thali",
     n: "Unlimited Kerala Sadya",
     img: "/hero_thali.jpg",
-    tag: "🍛 House Special",
-    isPrimary: true,
+    tag: "🍛 Unlimited Meals",
+    desc: "18+ Authentic Kerala curries & hot refills",
   },
   {
-    id: "masala-dosa",
+    id: "dosa",
     n: "Crispy Ghee Roast",
     img: "/masala_dosa.jpg",
-    tag: "🥞 Tiffin Favorite",
-    speed: 0.5,
+    tag: "🥞 Crispy Tiffin",
+    desc: "Golden roasted with pure ghee & chutneys",
   },
   {
-    id: "chicken-biryani",
+    id: "biryani",
     n: "Malabar Dum Biryani",
     img: "/chicken_biryani.jpg",
-    tag: "🍗 Chef's Choice",
-    speed: -0.45,
+    tag: "🍗 Chef's Dum Biryani",
+    desc: "Fragrant kaima rice with tender spiced chicken",
   },
   {
-    id: "palada-payasam",
+    id: "payasam",
     n: "Rich Palada Payasam",
     img: "/palada_payasam.jpg",
     tag: "✨ Daily Sweet",
-    speed: 0.4,
+    desc: "Slow-simmered milk payasam with tender ada",
   },
   {
     id: "chicken-dosa",
     n: "Special Chicken Dosa",
     img: "/chicken_dosa.jpg",
     tag: "🥘 Non-Veg Dosa",
-    speed: -0.5,
+    desc: "Crisp dosa stuffed with spicy chicken roast",
   },
   {
-    id: "kottayam-sambar",
-    n: "Kottayam Sambar & Sides",
+    id: "sambar",
+    n: "Kottayam Sambar & Curries",
     img: "/sambar.jpg",
     tag: "🍲 Homestyle Curry",
-    speed: 0.42,
+    desc: "Simmered toor dal with fresh drumsticks & spices",
   },
 ];
 
 export default function Plate() {
-  const [scrollY, setScrollY] = useState(0);
+  const [rotationAngle, setRotationAngle] = useState(0);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [activeIdx, setActiveIdx] = useState(0);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -57,7 +58,15 @@ export default function Plate() {
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setScrollY(window.scrollY);
+          // Calculate rotation from scroll position
+          const rot = window.scrollY * 0.35;
+          setRotationAngle(rot);
+          
+          // Calculate which dish is currently closest to the front (angle % 360)
+          const normalized = ((-rot % 360) + 360) % 360;
+          const index = Math.round(normalized / 60) % DISHES.length;
+          setActiveIdx(index);
+
           ticking = false;
         });
         ticking = true;
@@ -77,8 +86,8 @@ export default function Plate() {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((y - centerY) / centerY) * -10;
-    const rotateY = ((x - centerX) / centerX) * 10;
+    const rotateX = ((y - centerY) / centerY) * -8;
+    const rotateY = ((x - centerX) / centerX) * 8;
 
     setTilt({ x: rotateX, y: rotateY });
   };
@@ -87,22 +96,33 @@ export default function Plate() {
     setTilt({ x: 0, y: 0 });
   };
 
-  const primaryDish = HERO_DISHES[0];
-  const satelliteDishes = HERO_DISHES.slice(1);
+  const spinPrev = () => {
+    setRotationAngle((prev) => prev - 60);
+  };
+
+  const spinNext = () => {
+    setRotationAngle((prev) => prev + 60);
+  };
+
+  const totalDishes = DISHES.length;
+  const angleStep = 360 / totalDishes; // 60 deg each
 
   return (
     <div
-      className="kinetic-separated-showcase"
+      className="revolving-disk-viewport"
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       {/* Ambient Radial Golden Glow */}
-      <div className="wheels-ambient-glow" aria-hidden="true" />
+      <div className="revolving-ambient-glow" aria-hidden="true" />
 
-      {/* 3D Multi-Wheel Stage (6 Separated Food Items) */}
+      {/* Orbit Track Indicator Ring */}
+      <div className="orbit-track-ring" aria-hidden="true" />
+
+      {/* 3D Revolving Disk Carousel Stage */}
       <div
-        className="wheels-stage-separated"
+        className="revolving-disk-stage"
         style={{
           transform: `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
           transition:
@@ -111,76 +131,83 @@ export default function Plate() {
               : "transform 0.08s ease-out",
         }}
       >
-        {/* ========================================================
-            PRIMARY WHEEL: Authentic Kerala Thali Platter
-           ======================================================== */}
-        <div className="wheel-primary-box">
-          <div className="dish-wheel wheel-main-separated">
-            <div
-              className="wheel-disc-rotor"
-              style={{ transform: `rotate(${scrollY * 0.2}deg)` }}
-            >
-              <img
-                src={primaryDish.img}
-                alt={primaryDish.n}
-                className="wheel-img"
-              />
-              <div className="wheel-specular-glare" aria-hidden="true" />
-            </div>
+        {/* Revolving Rotor Hub */}
+        <div
+          className="revolving-hub"
+          style={{
+            transform: `rotate(${rotationAngle}deg)`,
+            transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+          }}
+        >
+          {DISHES.map((dish, i) => {
+            const currentItemAngle = i * angleStep;
 
-            {/* Steaming Hot Smoke Vapor */}
-            <div className="wheel-steam-container" aria-hidden="true">
-              <span className="wheel-steam ws1" />
-              <span className="wheel-steam ws2" />
-              <span className="wheel-steam ws3" />
-            </div>
-
-            {/* Kinetic Orbital Ring */}
-            <div className="wheel-orbital-ring ring-main" aria-hidden="true" />
-
-            <div className="wheel-label-pill glass">
-              <span>{primaryDish.tag}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* ========================================================
-            RIGHT CLUSTER: 5 Separated Satellite Dish Wheels
-           ======================================================== */}
-        <div className="wheels-satellite-grid">
-          {satelliteDishes.map((dish, idx) => {
-            const rot = scrollY * (dish.speed || 0.45);
             return (
-              <div key={dish.id} className="dish-wheel wheel-side-item">
+              <div
+                key={dish.id}
+                className="revolving-dish-spoke"
+                style={{
+                  transform: `rotate(${currentItemAngle}deg) translate(var(--disk-radius)) rotate(-${currentItemAngle}deg)`,
+                }}
+              >
+                {/* Counter-rotate the dish so it stays upright while carousel spins */}
                 <div
-                  className="wheel-disc-rotor"
-                  style={{ transform: `rotate(${rot}deg)` }}
+                  className="revolving-dish-unit"
+                  style={{
+                    transform: `rotate(-${rotationAngle}deg)`,
+                    transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+                  }}
                 >
-                  <img
-                    src={dish.img}
-                    alt={dish.n}
-                    className="wheel-img"
-                  />
-                  <div className="wheel-specular-glare" aria-hidden="true" />
-                </div>
+                  <div className="dish-wheel-frame">
+                    <img
+                      src={dish.img}
+                      alt={dish.n}
+                      className="dish-wheel-img"
+                    />
+                    <div className="wheel-specular-glare" aria-hidden="true" />
 
-                <div className="wheel-steam-container" aria-hidden="true">
-                  <span className={`wheel-steam ws${(idx % 3) + 1}`} />
-                  <span className={`wheel-steam ws${((idx + 1) % 3) + 1}`} />
-                </div>
+                    {/* Steaming Hot Smoke Vapor */}
+                    <div className="wheel-steam-container" aria-hidden="true">
+                      <span className="wheel-steam ws1" />
+                      <span className="wheel-steam ws2" />
+                    </div>
 
-                <div
-                  className={`wheel-orbital-ring ring-satellite ring-${(idx % 2) + 1}`}
-                  aria-hidden="true"
-                />
+                    <div className="wheel-orbital-ring ring-satellite" aria-hidden="true" />
+                  </div>
 
-                <div className="wheel-label-pill glass">
-                  <span>{dish.tag}</span>
+                  {/* Floating Glass Label Pill */}
+                  <div className="revolving-label-pill glass">
+                    <span className="pill-tag">{dish.tag}</span>
+                  </div>
                 </div>
               </div>
             );
           })}
         </div>
+      </div>
+
+      {/* Manual Spin Quick Controls & Indicator */}
+      <div className="revolving-controls-bar">
+        <button
+          type="button"
+          className="disk-nav-btn prev glass"
+          onClick={spinPrev}
+          aria-label="Rotate previous dishes"
+        >
+          ‹
+        </button>
+        <div className="disk-hint-pill glass">
+          <span className="disk-spin-icon">🎡</span>
+          <span>Scroll down to spin carousel (3 visible at a time)</span>
+        </div>
+        <button
+          type="button"
+          className="disk-nav-btn next glass"
+          onClick={spinNext}
+          aria-label="Rotate next dishes"
+        >
+          ›
+        </button>
       </div>
     </div>
   );
