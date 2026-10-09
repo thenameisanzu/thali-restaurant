@@ -68,40 +68,65 @@ const DISHES = [
 ];
 
 export default function Plate() {
+  const currentAngleRef = useRef(0);
+  const targetAngleRef = useRef(0);
   const [rotationAngle, setRotationAngle] = useState(0);
+
+  const currentTiltRef = useRef({ x: 0, y: 0 });
+  const targetTiltRef = useRef({ x: 0, y: 0 });
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
   const containerRef = useRef(null);
 
   useEffect(() => {
-    let ticking = false;
+    let animationFrameId;
 
     const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const stage = document.getElementById("hero-stage");
-          if (stage) {
-            const rect = stage.getBoundingClientRect();
-            const totalScrollable = stage.offsetHeight - window.innerHeight;
-            if (totalScrollable > 0) {
-              const progress = Math.min(Math.max(-rect.top / totalScrollable, 0), 1);
-              setRotationAngle(progress * 360);
-            }
-          } else {
-            const rot = (window.scrollY * 0.45) % 360;
-            setRotationAngle(rot);
-          }
-          ticking = false;
-        });
-        ticking = true;
+      const stage = document.getElementById("hero-stage");
+      if (stage) {
+        const rect = stage.getBoundingClientRect();
+        const totalScrollable = stage.offsetHeight - window.innerHeight;
+        if (totalScrollable > 0) {
+          const progress = Math.min(Math.max(-rect.top / totalScrollable, 0), 1);
+          targetAngleRef.current = progress * 360;
+        }
+      } else {
+        targetAngleRef.current = (window.scrollY * 0.4) % 360;
       }
+    };
+
+    // 60/120fps Inertia Damping Physics Loop (Ultra Smooth Gliding)
+    const physicsLoop = () => {
+      // 1. Rotation angle damping
+      const angleDiff = targetAngleRef.current - currentAngleRef.current;
+      if (Math.abs(angleDiff) > 0.005) {
+        currentAngleRef.current += angleDiff * 0.082;
+        setRotationAngle(currentAngleRef.current);
+      }
+
+      // 2. Mouse 3D tilt damping
+      const tiltXDiff = targetTiltRef.current.x - currentTiltRef.current.x;
+      const tiltYDiff = targetTiltRef.current.y - currentTiltRef.current.y;
+      if (Math.abs(tiltXDiff) > 0.01 || Math.abs(tiltYDiff) > 0.01) {
+        currentTiltRef.current.x += tiltXDiff * 0.1;
+        currentTiltRef.current.y += tiltYDiff * 0.1;
+        setTilt({ ...currentTiltRef.current });
+      }
+
+      animationFrameId = requestAnimationFrame(physicsLoop);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    animationFrameId = requestAnimationFrame(physicsLoop);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(animationFrameId);
+    };
   }, []);
 
-  // 3D Magnetic Mouse Tilt
+  // 3D Magnetic Mouse Tilt with Smooth Target Tracking
   const handleMouseMove = (e) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -110,18 +135,18 @@ export default function Plate() {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((y - centerY) / centerY) * -6;
-    const rotateY = ((x - centerX) / centerX) * 6;
-
-    setTilt({ x: rotateX, y: rotateY });
+    targetTiltRef.current = {
+      x: ((y - centerY) / centerY) * -5.5,
+      y: ((x - centerX) / centerX) * 5.5,
+    };
   };
 
   const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
+    targetTiltRef.current = { x: 0, y: 0 };
   };
 
   const spinStep = (dir) => {
-    setRotationAngle((prev) => prev + dir * 40);
+    targetAngleRef.current += dir * 40;
   };
 
   return (
@@ -138,26 +163,21 @@ export default function Plate() {
       <div
         className="wheel-3d-stage"
         style={{
-          transform: `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-          transition:
-            tilt.x === 0
-              ? "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)"
-              : "transform 0.08s ease-out",
+          transform: `perspective(1200px) rotateX(${tilt.x.toFixed(2)}deg) rotateY(${tilt.y.toFixed(2)}deg)`,
         }}
       >
-        {/* Revolving Rotor Hub */}
+        {/* Revolving Rotor Hub (Silky direct frame transforms) */}
         <div
           className="wheel-rotor-hub"
           style={{
-            transform: `rotate(${rotationAngle}deg)`,
-            transition: "transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)",
+            transform: `rotate(${rotationAngle.toFixed(2)}deg)`,
           }}
         >
           {DISHES.map((dish) => {
             // Effective angle on the 360 circle
             const effectiveAngle = (dish.baseAngle + rotationAngle) % 360;
             const normalized = (effectiveAngle + 360) % 360;
-            // Visible along the curved front/left arc (between 60deg and 300deg)
+            // Visible along the curved front arc (between 60deg and 300deg)
             const isVisibleOnArc = normalized >= 60 && normalized <= 300;
 
             return (
@@ -172,8 +192,7 @@ export default function Plate() {
                 <div
                   className="wheel-dish-unit"
                   style={{
-                    transform: `rotate(-${rotationAngle}deg)`,
-                    transition: "transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease",
+                    transform: `rotate(-${rotationAngle.toFixed(2)}deg)`,
                   }}
                 >
                   <div className="dish-plate-frame">
@@ -202,7 +221,7 @@ export default function Plate() {
         </div>
       </div>
 
-      {/* Clean Bottom Controls Bar (Positioned below dishes with zero overlap) */}
+      {/* Clean Bottom Controls Bar */}
       <div className="wheel-controls-bar">
         <button
           type="button"
