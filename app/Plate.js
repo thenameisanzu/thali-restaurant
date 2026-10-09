@@ -1,11 +1,13 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { plateDishes } from "./data";
 
 export default function Plate() {
   const [activeIdx, setActiveIdx] = useState(0);
   const [hoveredIdx, setHoveredIdx] = useState(null);
   const [isUserInteracting, setIsUserInteracting] = useState(false);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const containerRef = useRef(null);
 
   const displayIdx = hoveredIdx !== null ? hoveredIdx : activeIdx;
   const currentDish = plateDishes[displayIdx];
@@ -24,14 +26,43 @@ export default function Plate() {
     setActiveIdx(idx);
   };
 
+  // 3D Magnetic Mouse Tilt
+  const handleMouseMove = (e) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = ((y - centerY) / centerY) * -9; // Max 9 deg tilt
+    const rotateY = ((x - centerX) / centerX) * 9;
+
+    setTilt({ x: rotateX, y: rotateY });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
+
   return (
     <div
       className="plate-showcase-clean"
+      ref={containerRef}
       onMouseEnter={() => setIsUserInteracting(true)}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       onTouchStart={() => setIsUserInteracting(true)}
     >
-      {/* Platter with Interactive Hotspot Pins */}
-      <div className="plate-viewport-clean">
+      {/* Platter with 3D Interactive Tilt Engine */}
+      <div
+        className="plate-viewport-clean"
+        style={{
+          transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+          transition: tilt.x === 0 ? "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)" : "transform 0.1s ease-out",
+        }}
+      >
+        {/* Platter Disc with Specular Rim & Ambient Smoke */}
         <div className="plate-disc-clean">
           <img
             src="/hero_thali.jpg"
@@ -39,11 +70,15 @@ export default function Plate() {
             className="plate-main-image"
           />
 
+          {/* Holographic Specular Shine */}
+          <div className="plate-specular-sheen" aria-hidden="true" />
+
           {/* Steaming Smoke Effect */}
           <div className="steam-container" aria-hidden="true">
             <span className="steam-particle s1" />
             <span className="steam-particle s2" />
             <span className="steam-particle s3" />
+            <span className="steam-particle s4" />
           </div>
 
           {/* Dish Hotspots */}
@@ -90,6 +125,7 @@ export default function Plate() {
                 >
                   <span className="pin-core-dot" />
                   <span className="pin-radar-wave" />
+                  <span className="pin-radar-wave-2" />
                 </button>
               </div>
             );
