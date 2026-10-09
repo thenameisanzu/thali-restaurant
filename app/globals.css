@@ -852,19 +852,23 @@ a {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  max-width: 100%;
   position: relative;
   z-index: 2;
-  margin-top: 8px;
+  margin-top: 4px;
+  overflow: hidden;
 }
 
 .mobile-dish-coverflow {
   position: relative;
   width: 100%;
-  height: 190px;
+  max-width: 100%;
+  height: 175px;
   display: flex;
   align-items: center;
   justify-content: center;
   perspective: 1000px;
+  overflow: hidden;
 }
 
 .mobile-coverflow-card {
@@ -875,48 +879,48 @@ a {
 }
 
 .mobile-coverflow-card.is-center {
-  width: 180px;
-  height: 180px;
+  width: 155px;
+  height: 155px;
   z-index: 10;
   transform: translateX(0) scale(1);
   opacity: 1;
 }
 
 .mobile-coverflow-card.is-left {
-  width: 135px;
-  height: 135px;
+  width: 110px;
+  height: 110px;
   z-index: 5;
-  transform: translateX(-115px) scale(0.78) rotateY(20deg);
-  opacity: 0.55;
+  transform: translateX(-78px) scale(0.75) rotateY(15deg);
+  opacity: 0.5;
 }
 
 .mobile-coverflow-card.is-right {
-  width: 135px;
-  height: 135px;
+  width: 110px;
+  height: 110px;
   z-index: 5;
-  transform: translateX(115px) scale(0.78) rotateY(-20deg);
-  opacity: 0.55;
+  transform: translateX(78px) scale(0.75) rotateY(-15deg);
+  opacity: 0.5;
 }
 
 .mobile-dish-info {
-  margin-top: 12px;
-  padding: 5px 16px;
+  margin-top: 10px;
+  padding: 4px 14px;
   border-radius: 999px;
   text-align: center;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 
 .mobile-dish-tag {
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 700;
   color: var(--g);
 }
 
 .mobile-dish-title {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 800;
   color: var(--g-dark);
 }
@@ -930,6 +934,23 @@ a {
 @media (max-width: 767px) {
   .desktop-ipad-wheel-stage {
     display: none !important;
+  }
+
+  .revolving-wheel-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    min-height: auto !important;
+    padding: 2px 0 10px !important;
+  }
+
+  .wheel-ambient-glow {
+    width: 260px !important;
+    height: 260px !important;
+    top: 45% !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translate(-50%, -50%) !important;
   }
 }
 
