@@ -219,10 +219,14 @@ export default function Plate() {
           {DISHES.map((dish) => {
             const effectiveAngle = (dish.baseAngle + rotationAngle) % 360;
             const normalized = (effectiveAngle + 360) % 360;
-            // On mobile: strictly 3 dishes in the arc (100° to 260°). On desktop: 4-5 dishes (60° to 300°)
+            const distFromCenter = Math.abs(normalized - 180);
+
+            // On mobile: strictly 3 dishes in the arc (130° to 230°). On desktop: 4-5 dishes (60° to 300°)
             const isVisibleOnArc = isMobile
-              ? normalized >= 95 && normalized <= 265
+              ? normalized >= 130 && normalized <= 230
               : normalized >= 60 && normalized <= 300;
+
+            const isCenterFocus = distFromCenter <= 22;
 
             return (
               <div
@@ -234,12 +238,12 @@ export default function Plate() {
               >
                 {/* Counter-rotate dish unit so food image stays upright */}
                 <div
-                  className="wheel-dish-unit"
+                  className={`wheel-dish-unit ${isCenterFocus ? "is-center-focus" : "is-flank"}`}
                   style={{
                     transform: `rotate(-${rotationAngle.toFixed(2)}deg)`,
                   }}
                 >
-                  <div className="dish-plate-frame">
+                  <div className={`dish-plate-frame ${isCenterFocus ? "frame-glow" : ""}`}>
                     <img
                       src={dish.img}
                       alt={dish.n}
@@ -250,9 +254,12 @@ export default function Plate() {
                     <div className="wheel-specular-glare" aria-hidden="true" />
                   </div>
 
-                  <div className="dish-plate-pill glass">
-                    <span>{dish.tag}</span>
-                  </div>
+                  {/* Show tag pill only for center dish on mobile, or all visible on desktop */}
+                  {(!isMobile || isCenterFocus) && (
+                    <div className={`dish-plate-pill glass ${isCenterFocus ? "pill-active" : ""}`}>
+                      <span>{dish.tag}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             );
