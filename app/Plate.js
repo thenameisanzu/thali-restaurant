@@ -7,63 +7,63 @@ const DISHES = [
     n: "Unlimited Kerala Sadya",
     img: "/hero_thali.jpg",
     tag: "🍛 Unlimited Sadya",
-    baseAngle: 180,
+    baseAngle: 180, // Center Left
   },
   {
     id: "dosa",
     n: "Crispy Ghee Roast",
     img: "/masala_dosa.jpg",
     tag: "🥞 Crispy Ghee Roast",
-    baseAngle: 140,
+    baseAngle: 140, // Upper Left
   },
   {
     id: "biryani",
     n: "Malabar Dum Biryani",
     img: "/chicken_biryani.jpg",
     tag: "🍗 Malabar Biryani",
-    baseAngle: 220,
+    baseAngle: 220, // Lower Left
   },
   {
     id: "beef-roast",
     n: "Porotta & Beef Roast",
     img: "/beef_roast.jpg",
     tag: "🥩 Porotta & Beef Fry",
-    baseAngle: 100,
+    baseAngle: 100, // Top Arc
   },
   {
     id: "fish-curry",
     n: "Kottayam Meen Curry",
     img: "/fish_curry.jpg",
     tag: "🐟 Kottayam Fish Curry",
-    baseAngle: 260,
+    baseAngle: 260, // Bottom Arc
   },
   {
     id: "chicken-dosa",
     n: "Special Chicken Dosa",
     img: "/chicken_dosa.jpg",
     tag: "🥘 Non-Veg Dosa",
-    baseAngle: 60,
+    baseAngle: 60, // Top Right Entry
   },
   {
     id: "appam-stew",
     n: "Appam & Chicken Stew",
     img: "/appam_stew.jpg",
     tag: "🍲 Appam & Stew",
-    baseAngle: 300,
+    baseAngle: 300, // Bottom Right Entry
   },
   {
     id: "payasam",
     n: "Rich Palada Payasam",
     img: "/palada_payasam.jpg",
     tag: "✨ Daily Sweet",
-    baseAngle: 20,
+    baseAngle: 20, // Offscreen Right
   },
   {
     id: "sambar",
     n: "Kottayam Sambar & Curries",
     img: "/sambar.jpg",
     tag: "🍲 Homestyle Curry",
-    baseAngle: 340,
+    baseAngle: 340, // Offscreen Right
   },
 ];
 
@@ -76,21 +76,9 @@ export default function Plate() {
   const targetTiltRef = useRef({ x: 0, y: 0 });
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-
   const containerRef = useRef(null);
   const touchStartRef = useRef({ x: 0, y: 0 });
   const isDraggingRef = useRef(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   useEffect(() => {
     let animationFrameId;
@@ -103,20 +91,13 @@ export default function Plate() {
         if (totalScrollable > 0) {
           const progress = Math.min(Math.max(-rect.top / totalScrollable, 0), 1);
           targetAngleRef.current = progress * 360;
-
-          // Compute mobile active dish index from scroll
-          const mobileIdx = Math.min(
-            Math.floor(progress * DISHES.length),
-            DISHES.length - 1
-          );
-          setActiveIndex(mobileIdx);
         }
       } else {
         targetAngleRef.current = (window.scrollY * 0.45) % 360;
       }
     };
 
-    // 60/120fps Native App-Like Physics Interpolation
+    // 60/120fps Inertia Damping Physics Loop
     const physicsLoop = () => {
       const angleDiff = targetAngleRef.current - currentAngleRef.current;
       if (Math.abs(angleDiff) > 0.005) {
@@ -145,9 +126,9 @@ export default function Plate() {
     };
   }, []);
 
-  // 3D Tilt for Desktop / iPad
+  // 3D Magnetic Tilt
   const handleMouseMove = (e) => {
-    if (!containerRef.current || isMobile) return;
+    if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -164,7 +145,7 @@ export default function Plate() {
     targetTiltRef.current = { x: 0, y: 0 };
   };
 
-  // Mobile & iPad Touch Swipe Gestures
+  // Touch Swipe & Flick Drag Gestures for Mobile / iPad
   const handleTouchStart = (e) => {
     if (e.touches.length !== 1) return;
     const touch = e.touches[0];
@@ -181,21 +162,8 @@ export default function Plate() {
     const deltaY = touch.clientY - touchStartRef.current.y;
     const deltaX = touch.clientX - touchStartRef.current.x;
 
-    if (isMobile) {
-      // Horizontal swipe navigation on mobile
-      if (Math.abs(deltaX) > 35) {
-        if (deltaX < 0) {
-          nextDish();
-        } else {
-          prevDish();
-        }
-        isDraggingRef.current = false;
-      }
-    } else {
-      // Fluid circular wheel rotation drag on tablet/desktop
-      const touchDelta = deltaY * 0.35 - deltaX * 0.25;
-      targetAngleRef.current += touchDelta * 0.2;
-    }
+    const touchDelta = deltaY * 0.35 - deltaX * 0.25;
+    targetAngleRef.current += touchDelta * 0.22;
 
     touchStartRef.current = {
       x: touch.clientX,
@@ -207,23 +175,9 @@ export default function Plate() {
     isDraggingRef.current = false;
   };
 
-  const nextDish = () => {
-    if (isMobile) {
-      setActiveIndex((prev) => (prev + 1) % DISHES.length);
-    } else {
-      targetAngleRef.current += 40;
-    }
+  const spinStep = (dir) => {
+    targetAngleRef.current += dir * 40;
   };
-
-  const prevDish = () => {
-    if (isMobile) {
-      setActiveIndex((prev) => (prev - 1 + DISHES.length) % DISHES.length);
-    } else {
-      targetAngleRef.current -= 40;
-    }
-  };
-
-  const currentMobileDish = DISHES[activeIndex] || DISHES[0];
 
   return (
     <div
@@ -239,58 +193,9 @@ export default function Plate() {
       {/* Ambient Radial Golden Aura */}
       <div className="wheel-ambient-glow" aria-hidden="true" />
 
-      {/* =========================================
-          1. MOBILE DEDICATED APP COVERFLOW (< 768px)
-          ========================================= */}
-      <div className="mobile-app-dish-stage">
-        <div className="mobile-dish-coverflow">
-          {[-1, 0, 1].map((offset) => {
-            const index = (activeIndex + offset + DISHES.length) % DISHES.length;
-            const dish = DISHES[index];
-            const isCenter = offset === 0;
-
-            return (
-              <div
-                key={`${dish.id}-${offset}`}
-                className={`mobile-coverflow-card ${isCenter ? "is-center" : offset < 0 ? "is-left" : "is-right"}`}
-                onClick={() => {
-                  if (offset === -1) prevDish();
-                  if (offset === 1) nextDish();
-                }}
-              >
-                <div className="dish-plate-frame">
-                  <img
-                    src={dish.img}
-                    alt={dish.n}
-                    className="dish-plate-img"
-                    loading="eager"
-                    draggable="false"
-                  />
-                  <div className="wheel-specular-glare" aria-hidden="true" />
-                  {isCenter && (
-                    <div className="wheel-steam-container" aria-hidden="true">
-                      <span className="wheel-steam ws1" />
-                      <span className="wheel-steam ws2" />
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Mobile Active Dish Card Info */}
-        <div className="mobile-dish-info glass">
-          <div className="mobile-dish-tag">{currentMobileDish.tag}</div>
-          <div className="mobile-dish-title">{currentMobileDish.n}</div>
-        </div>
-      </div>
-
-      {/* =========================================
-          2. DESKTOP & IPAD 3D CIRCULAR WHEEL (>= 768px)
-          ========================================= */}
+      {/* 3D Circular Wheel Stage */}
       <div
-        className="wheel-3d-stage desktop-ipad-wheel-stage"
+        className="wheel-3d-stage"
         style={{
           transform: `perspective(1200px) rotateX(${tilt.x.toFixed(2)}deg) rotateY(${tilt.y.toFixed(2)}deg)`,
         }}
@@ -304,6 +209,7 @@ export default function Plate() {
           {DISHES.map((dish) => {
             const effectiveAngle = (dish.baseAngle + rotationAngle) % 360;
             const normalized = (effectiveAngle + 360) % 360;
+            // Visible on the front arc
             const isVisibleOnArc = normalized >= 60 && normalized <= 300;
 
             return (
@@ -314,6 +220,7 @@ export default function Plate() {
                   transform: `rotate(${dish.baseAngle}deg) translate(var(--wheel-radius)) rotate(-${dish.baseAngle}deg)`,
                 }}
               >
+                {/* Counter-rotate dish unit so food image stays upright */}
                 <div
                   className="wheel-dish-unit"
                   style={{
@@ -350,7 +257,7 @@ export default function Plate() {
         <button
           type="button"
           className="wheel-nav-btn prev glass"
-          onClick={prevDish}
+          onClick={() => spinStep(-1)}
           aria-label="Previous dish"
         >
           ‹
@@ -359,14 +266,14 @@ export default function Plate() {
         <div className="wheel-hint-pill glass">
           <span className="wheel-spin-icon">🎡</span>
           <span>
-            <strong>{isMobile ? `Dish ${activeIndex + 1} of 9` : "9 Specialties"}</strong> • {isMobile ? "Swipe or tap to switch" : "Scroll or swipe to spin"}
+            <strong>9 Specialties</strong> • Scroll or swipe to spin
           </span>
         </div>
 
         <button
           type="button"
           className="wheel-nav-btn next glass"
-          onClick={nextDish}
+          onClick={() => spinStep(1)}
           aria-label="Next dish"
         >
           ›
