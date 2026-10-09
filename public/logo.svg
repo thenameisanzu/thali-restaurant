@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <!-- Transparent Background -->
+  
+  <!-- Outer Blue Ring -->
+  <circle cx="300" cy="300" r="282" fill="none" stroke="#0b63ce" stroke-width="8" />
+
+  <!-- Logo Graphics Group -->
+  <g fill="#2e6335">
+    <!-- "THALI" Stylized Custom Lettering & Ring -->
+    <!-- T -->
+    <path d="M 64 260 L 64 238 Q 78 238 88 234 Q 96 230 100 220 L 126 220 L 126 312 Q 126 324 116 328 Q 106 332 88 332 L 88 340 L 168 340 L 168 332 Q 150 332 140 328 Q 130 324 130 312 L 130 220 L 156 220 Q 160 230 168 234 Q 178 238 192 238 L 192 260 L 180 260 Q 174 246 160 240 Q 146 235 128 235 L 128 235 Q 110 235 96 240 Q 82 246 76 260 Z" />
+
+    <!-- H -->
+    <path d="M 174 340 L 230 340 L 230 332 Q 218 332 212 327 Q 206 322 206 310 L 206 280 L 254 280 L 254 310 Q 254 322 248 327 Q 242 332 230 332 L 230 340 L 286 340 L 286 332 Q 274 332 268 327 Q 262 322 262 310 L 262 250 Q 262 238 268 233 Q 274 228 286 228 L 286 220 L 230 220 L 230 228 Q 242 228 248 233 Q 254 238 254 250 L 254 268 L 206 268 L 206 250 Q 206 238 212 233 Q 218 228 230 228 L 230 220 L 174 220 L 174 228 Q 186 228 192 233 Q 198 238 198 250 L 198 310 Q 198 322 192 327 Q 186 332 174 332 Z" />
+
+    <!-- A and the Sweeping Thali Loop -->
+    <!-- Left leg of A -->
+    <path d="M 280 340 L 324 340 L 324 332 Q 312 332 306 324 Q 302 318 308 302 L 326 254 L 348 302 Q 354 316 348 324 Q 342 332 328 332 L 328 340 L 372 340 L 372 332 Q 360 332 354 324 L 332 274 L 310 274 L 298 304 Q 292 320 286 326 Q 280 332 270 332 L 270 340 Z" />
+    
+    <!-- Top apex and Flourish Circle wrapping around LI -->
+    <path d="M 312 216 L 338 216 L 376 304 C 400 260 450 210 514 236 C 564 256 578 316 552 364 C 522 418 438 424 384 388 C 342 358 324 314 348 266 C 354 252 368 244 382 246 C 362 264 362 292 376 320 C 400 366 462 386 504 354 C 538 328 542 280 508 256 C 466 226 406 250 376 298 L 336 216 Z" />
+
+    <!-- Inner bar of A -->
+    <polygon points="316,278 344,278 330,244" />
+
+    <!-- L (inside loop) -->
+    <path d="M 404 336 L 442 336 Q 452 336 456 332 Q 460 328 462 316 L 468 316 L 466 340 L 396 340 L 396 332 Q 404 332 408 327 Q 412 322 412 312 L 412 260 Q 412 250 408 245 Q 404 240 396 240 L 396 232 L 434 232 L 434 240 Q 426 240 422 245 Q 418 250 418 260 L 418 314 Q 418 324 422 328 Q 426 332 436 332 L 442 332 Z" />
+
+    <!-- I (inside loop) -->
+    <path d="M 470 340 L 512 340 L 512 332 Q 502 332 498 327 Q 494 322 494 312 L 494 260 Q 494 250 498 245 Q 502 240 512 240 L 512 232 L 470 232 L 470 240 Q 480 240 484 245 Q 488 250 488 260 L 488 312 Q 488 322 484 327 Q 480 332 470 332 Z" />
+  </g>
+
+  <!-- RESTAURANT Text (Bold Black Sans-Serif) -->
+  <text x="300" y="388"
+        text-anchor="middle"
+        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+        font-size="36"
+        font-weight="900"
+        letter-spacing="9"
+        fill="#141714">
+    RESTAURANT
+  </text>
+
+  <!-- Tagline Text (Green Sans-Serif) -->
+  <text x="300" y="438"
+        text-anchor="middle"
+        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+        font-size="21"
+        font-weight="700"
+        letter-spacing="2.5"
+        fill="#2e6335">
+    SERVING GOOD FOOD SINCE 1983
+  </text>
+</svg>
