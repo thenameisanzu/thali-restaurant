@@ -809,7 +809,7 @@ a {
     position: sticky;
     top: 0;
     height: 100vh;
-    min-height: 620px;
+    min-height: 580px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -818,6 +818,87 @@ a {
   }
 }
 
+/* iPad Portrait Layout (768px - 899px): Clean 2-column side-by-side */
+@media (min-width: 768px) and (max-width: 899px) {
+  :root {
+    --wheel-radius: 170px;
+  }
+
+  .hero {
+    min-height: 100dvh;
+    padding-top: calc(76px + max(12px, env(safe-area-inset-top))) !important;
+    padding-bottom: 24px !important;
+  }
+
+  .hero-split-grid {
+    grid-template-columns: 1.08fr 0.92fr !important;
+    gap: 20px !important;
+    align-items: center;
+  }
+
+  .hero-left-column {
+    align-items: flex-start !important;
+    text-align: left !important;
+    gap: 8px !important;
+  }
+
+  .hero-meta-badges {
+    justify-content: flex-start !important;
+    gap: 6px !important;
+  }
+
+  .hero-title {
+    font-size: clamp(2.4rem, 5vw, 3.4rem) !important;
+    margin: 2px 0 4px !important;
+    line-height: 0.95 !important;
+  }
+
+  .hero-tagline {
+    font-size: 0.92rem !important;
+    line-height: 1.4 !important;
+    max-width: 32ch !important;
+  }
+
+  .hero-cuisine-chips {
+    justify-content: flex-start !important;
+    gap: 6px !important;
+    margin: 2px 0 6px !important;
+  }
+
+  .hero-buttons {
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    margin: 6px 0 !important;
+  }
+
+  .hero-buttons .btn {
+    min-height: 42px !important;
+    font-size: 0.86rem !important;
+    padding: 0 16px !important;
+  }
+
+  .hero-trust-bar {
+    display: none !important;
+  }
+
+  .revolving-wheel-container {
+    max-width: 100% !important;
+    min-height: 420px !important;
+    align-items: flex-end !important;
+    overflow: visible !important;
+  }
+
+  .wheel-3d-stage {
+    margin-right: -45px !important;
+  }
+
+  .wheel-controls-bar {
+    margin-top: 20px !important;
+    gap: 8px !important;
+  }
+}
+
+/* Mobile Layout (< 768px): Clean, streamlined, zero clutter single-column */
 @media (max-width: 767px) {
   :root {
     --wheel-radius: 135px;
@@ -840,39 +921,53 @@ a {
   }
 
   .hero-split-grid {
-    gap: 16px !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
     padding-inline: 4px;
   }
 
+  .hero-left-column {
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+  }
+
   .hero-meta-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
     gap: 6px !important;
     margin-bottom: 2px !important;
   }
 
   .hero-live-status,
   .hero-rating-badge {
-    font-size: 0.74rem !important;
+    font-size: 0.72rem !important;
     padding: 4px 10px !important;
   }
 
   .kicker {
-    font-size: 0.82rem !important;
+    font-size: 0.8rem !important;
     margin-bottom: 0 !important;
   }
 
   .hero-title {
-    font-size: clamp(2.9rem, 11vw, 4.2rem) !important;
+    font-size: clamp(2.8rem, 11vw, 4rem) !important;
     margin: 2px 0 4px !important;
     line-height: 0.95 !important;
   }
 
   .hero-tagline {
-    font-size: 0.9rem !important;
-    line-height: 1.45 !important;
+    font-size: 0.88rem !important;
+    line-height: 1.4 !important;
     max-width: 36ch !important;
   }
 
   .hero-cuisine-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 6px !important;
     margin: 2px 0 8px !important;
   }
@@ -888,7 +983,7 @@ a {
     gap: 8px !important;
     width: 100% !important;
     max-width: 360px !important;
-    margin: 4px auto 8px !important;
+    margin: 4px auto 6px !important;
   }
 
   .hero-buttons .btn.solid {
@@ -909,8 +1004,8 @@ a {
   }
 
   .revolving-wheel-container {
-    min-height: 330px !important;
-    padding: 8px 0 18px !important;
+    min-height: 310px !important;
+    padding: 4px 0 16px !important;
     margin-top: 0 !important;
   }
 
@@ -919,8 +1014,8 @@ a {
   }
 
   .wheel-controls-bar {
-    margin-top: 24px !important;
-    margin-bottom: 4px !important;
+    margin-top: 20px !important;
+    margin-bottom: 2px !important;
   }
 }
 

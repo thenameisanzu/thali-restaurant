@@ -95,16 +95,16 @@ export default function Plate() {
 
     const handleScroll = () => {
       const stage = document.getElementById("hero-stage");
-      if (stage) {
+      if (stage && window.innerWidth >= 768) {
         const rect = stage.getBoundingClientRect();
         const totalScrollable = stage.offsetHeight - window.innerHeight;
         if (totalScrollable > 0) {
           const progress = Math.min(Math.max(-rect.top / totalScrollable, 0), 1);
           targetAngleRef.current = progress * 360;
+          return;
         }
-      } else {
-        targetAngleRef.current = (window.scrollY * 0.45) % 360;
       }
+      targetAngleRef.current = (window.scrollY * 0.4) % 360;
     };
 
     // 60/120fps Inertia Damping Physics Loop
@@ -172,8 +172,8 @@ export default function Plate() {
     const deltaY = touch.clientY - touchStartRef.current.y;
     const deltaX = touch.clientX - touchStartRef.current.x;
 
-    const touchDelta = deltaY * 0.35 - deltaX * 0.25;
-    targetAngleRef.current += touchDelta * 0.22;
+    const touchDelta = deltaY * 0.45 - deltaX * 0.3;
+    targetAngleRef.current += touchDelta * 0.28;
 
     touchStartRef.current = {
       x: touch.clientX,
