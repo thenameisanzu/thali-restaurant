@@ -1,62 +1,63 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 
-const REEL_DISHES = [
+const HERO_DISHES = [
   {
-    id: "thali",
-    name: "Kerala Sadya",
+    id: "main-thali",
+    n: "Unlimited Kerala Sadya",
     img: "/hero_thali.jpg",
-    angle: 0,
+    tag: "🍛 House Special",
+    isPrimary: true,
   },
   {
-    id: "dosa",
-    name: "Crispy Dosa",
+    id: "masala-dosa",
+    n: "Crispy Ghee Roast",
     img: "/masala_dosa.jpg",
-    angle: 60,
+    tag: "🥞 Tiffin Favorite",
+    speed: 0.5,
   },
   {
-    id: "biryani",
-    name: "Dum Biryani",
+    id: "chicken-biryani",
+    n: "Malabar Dum Biryani",
     img: "/chicken_biryani.jpg",
-    angle: 120,
+    tag: "🍗 Chef's Choice",
+    speed: -0.45,
   },
   {
-    id: "chicken_dosa",
-    name: "Chicken Dosa",
-    img: "/chicken_dosa.jpg",
-    angle: 180,
-  },
-  {
-    id: "payasam",
-    name: "Palada Payasam",
+    id: "palada-payasam",
+    n: "Rich Palada Payasam",
     img: "/palada_payasam.jpg",
-    angle: 240,
+    tag: "✨ Daily Sweet",
+    speed: 0.4,
   },
   {
-    id: "sambar",
-    name: "Kottayam Sambar",
+    id: "chicken-dosa",
+    n: "Special Chicken Dosa",
+    img: "/chicken_dosa.jpg",
+    tag: "🥘 Non-Veg Dosa",
+    speed: -0.5,
+  },
+  {
+    id: "kottayam-sambar",
+    n: "Kottayam Sambar & Sides",
     img: "/sambar.jpg",
-    angle: 300,
+    tag: "🍲 Homestyle Curry",
+    speed: 0.42,
   },
 ];
 
 export default function Plate() {
-  const [rotation, setRotation] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const containerRef = useRef(null);
 
   useEffect(() => {
     let ticking = false;
 
-    // Check prefers-reduced-motion
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) return;
-
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          // Continuous scroll progress rotation (0.22 deg per pixel scrolled)
-          setRotation(window.scrollY * 0.22);
+          setScrollY(window.scrollY);
           ticking = false;
         });
         ticking = true;
@@ -64,13 +65,10 @@ export default function Plate() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    // Initial sync
-    handleScroll();
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Subtle 3D Magnetic Mouse Tilt on Desktop
+  // 3D Magnetic Mouse Tilt
   const handleMouseMove = (e) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -79,8 +77,8 @@ export default function Plate() {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((y - centerY) / centerY) * -8;
-    const rotateY = ((x - centerX) / centerX) * 8;
+    const rotateX = ((y - centerY) / centerY) * -10;
+    const rotateY = ((x - centerX) / centerX) * 10;
 
     setTilt({ x: rotateX, y: rotateY });
   };
@@ -89,72 +87,99 @@ export default function Plate() {
     setTilt({ x: 0, y: 0 });
   };
 
+  const primaryDish = HERO_DISHES[0];
+  const satelliteDishes = HERO_DISHES.slice(1);
+
   return (
     <div
-      className="film-reel-showcase"
+      className="kinetic-separated-showcase"
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       {/* Ambient Radial Golden Glow */}
-      <div className="reel-ambient-glow" aria-hidden="true" />
+      <div className="wheels-ambient-glow" aria-hidden="true" />
 
-      {/* 3D Viewport */}
+      {/* 3D Multi-Wheel Stage (6 Separated Food Items) */}
       <div
-        className="reel-stage"
+        className="wheels-stage-separated"
         style={{
-          transform: `perspective(1100px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+          transform: `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
           transition:
             tilt.x === 0
               ? "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)"
               : "transform 0.08s ease-out",
         }}
       >
-        {/* Film Reel Wheel Chassis (Rotates with scroll) */}
-        <div
-          className="reel-chassis"
-          style={{ transform: `rotate(${rotation}deg)` }}
-        >
-          {/* Metallic / Glass Outer Rim */}
-          <div className="reel-outer-rim" aria-hidden="true" />
-          <div className="reel-inner-groove" aria-hidden="true" />
+        {/* ========================================================
+            PRIMARY WHEEL: Authentic Kerala Thali Platter
+           ======================================================== */}
+        <div className="wheel-primary-box">
+          <div className="dish-wheel wheel-main-separated">
+            <div
+              className="wheel-disc-rotor"
+              style={{ transform: `rotate(${scrollY * 0.2}deg)` }}
+            >
+              <img
+                src={primaryDish.img}
+                alt={primaryDish.n}
+                className="wheel-img"
+              />
+              <div className="wheel-specular-glare" aria-hidden="true" />
+            </div>
 
-          {/* Symmetrical 6 Film Reel Cutouts (Holes) with Counter-Rotating Upright Food Images */}
-          {REEL_DISHES.map((dish) => {
-            // Total orbital angle for this slot
-            const slotAngle = dish.angle;
+            {/* Steaming Hot Smoke Vapor */}
+            <div className="wheel-steam-container" aria-hidden="true">
+              <span className="wheel-steam ws1" />
+              <span className="wheel-steam ws2" />
+              <span className="wheel-steam ws3" />
+            </div>
 
+            {/* Kinetic Orbital Ring */}
+            <div className="wheel-orbital-ring ring-main" aria-hidden="true" />
+
+            <div className="wheel-label-pill glass">
+              <span>{primaryDish.tag}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ========================================================
+            RIGHT CLUSTER: 5 Separated Satellite Dish Wheels
+           ======================================================== */}
+        <div className="wheels-satellite-grid">
+          {satelliteDishes.map((dish, idx) => {
+            const rot = scrollY * (dish.speed || 0.45);
             return (
-              <div
-                key={dish.id}
-                className="reel-cutout-slot"
-                style={{
-                  transform: `translate(-50%, -50%) rotate(${slotAngle}deg) translateY(calc(-1 * var(--reel-radius, 126px))) rotate(-${slotAngle + rotation}deg)`,
-                }}
-              >
-                {/* Clean Circular Cutout Housing the Food Photo */}
-                <div className="reel-dish-circle">
+              <div key={dish.id} className="dish-wheel wheel-side-item">
+                <div
+                  className="wheel-disc-rotor"
+                  style={{ transform: `rotate(${rot}deg)` }}
+                >
                   <img
                     src={dish.img}
-                    alt={dish.name}
-                    className="reel-dish-img"
-                    loading="eager"
+                    alt={dish.n}
+                    className="wheel-img"
                   />
-                  {/* Subtle Specular Sheen across aperture */}
-                  <div className="reel-cutout-sheen" aria-hidden="true" />
+                  <div className="wheel-specular-glare" aria-hidden="true" />
+                </div>
+
+                <div className="wheel-steam-container" aria-hidden="true">
+                  <span className={`wheel-steam ws${(idx % 3) + 1}`} />
+                  <span className={`wheel-steam ws${((idx + 1) % 3) + 1}`} />
+                </div>
+
+                <div
+                  className={`wheel-orbital-ring ring-satellite ring-${(idx % 2) + 1}`}
+                  aria-hidden="true"
+                />
+
+                <div className="wheel-label-pill glass">
+                  <span>{dish.tag}</span>
                 </div>
               </div>
             );
           })}
-
-          {/* Central Hub / Rosette Axle (Inspired by film reel center) */}
-          <div className="reel-center-hub" aria-hidden="true">
-            <div className="hub-outer-ring" />
-            <div className="hub-core-bolt">
-              <span className="hub-core-dot" />
-            </div>
-            <div className="hub-spokes-accent" />
-          </div>
         </div>
       </div>
     </div>
