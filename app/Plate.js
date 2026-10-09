@@ -75,10 +75,20 @@ export default function Plate() {
   const currentTiltRef = useRef({ x: 0, y: 0 });
   const targetTiltRef = useRef({ x: 0, y: 0 });
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
 
   const containerRef = useRef(null);
   const touchStartRef = useRef({ x: 0, y: 0 });
   const isDraggingRef = useRef(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     let animationFrameId;
@@ -128,7 +138,7 @@ export default function Plate() {
 
   // 3D Magnetic Tilt
   const handleMouseMove = (e) => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || isMobile) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -209,8 +219,10 @@ export default function Plate() {
           {DISHES.map((dish) => {
             const effectiveAngle = (dish.baseAngle + rotationAngle) % 360;
             const normalized = (effectiveAngle + 360) % 360;
-            // Visible on the front arc
-            const isVisibleOnArc = normalized >= 60 && normalized <= 300;
+            // On mobile: strictly 3 dishes in the arc (100° to 260°). On desktop: 4-5 dishes (60° to 300°)
+            const isVisibleOnArc = isMobile
+              ? normalized >= 95 && normalized <= 265
+              : normalized >= 60 && normalized <= 300;
 
             return (
               <div
@@ -236,10 +248,6 @@ export default function Plate() {
                       draggable="false"
                     />
                     <div className="wheel-specular-glare" aria-hidden="true" />
-                    <div className="wheel-steam-container" aria-hidden="true">
-                      <span className="wheel-steam ws1" />
-                      <span className="wheel-steam ws2" />
-                    </div>
                   </div>
 
                   <div className="dish-plate-pill glass">
