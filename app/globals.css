@@ -131,188 +131,302 @@ a {
   box-shadow: var(--liquid-highlight), var(--liquid-shadow);
 }
 
-/* Floating Navigation Bar (Apple Liquid Dock Style) */
+/* Unified Top Floating Navigation Bar (Apple Liquid Dock) */
 .nav {
   position: fixed;
-  z-index: 99;
+  z-index: 100;
   left: 50%;
   transform: translateX(-50%);
-  width: min(560px, calc(100% - 20px));
+  top: max(10px, env(safe-area-inset-top));
+  bottom: auto;
+  width: min(940px, calc(100% - 20px));
   border-radius: 999px;
-  bottom: max(14px, env(safe-area-inset-bottom));
-  padding: 6px;
+  padding: 6px 12px 6px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.nav.is-scrolled {
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--liquid-highlight), 0 20px 48px -6px rgba(18, 56, 28, 0.18), 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
 /* Specular Light Reflection Edge */
 .dock-specular-highlight {
   position: absolute;
   top: 1px;
-  left: 12%;
-  right: 12%;
+  left: 10%;
+  right: 10%;
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent);
   pointer-events: none;
   border-radius: 999px;
 }
 
+/* Brand Logo & Name (Always Visible on all screen sizes) */
 .nav .brand {
-  display: none;
-}
-
-.nav nav {
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
   align-items: center;
-  gap: 3px;
-  position: relative;
-}
-
-.nav nav .nav-item {
-  flex: 1;
-  position: relative;
-  text-align: center;
-  font-weight: 600;
-  font-size: 0.82rem;
-  padding: 8px 6px;
-  border-radius: 999px;
-  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
-  color: var(--ink);
-  min-height: 38px;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
+  gap: 10px;
+  text-decoration: none;
+  line-height: 1.1;
   user-select: none;
 }
 
-.nav nav .nav-item:active {
-  transform: scale(0.94);
-}
-
-.nav nav .nav-item:hover {
-  background: rgba(30, 90, 46, 0.08);
-  color: var(--g);
-}
-
-/* Active Section Highlighting */
-.nav nav .nav-item.active {
-  background: rgba(30, 90, 46, 0.12);
-  color: var(--g);
-  font-weight: 700;
-  box-shadow: inset 0 1px 2px rgba(30, 90, 46, 0.08), 0 2px 10px rgba(30, 90, 46, 0.14);
-}
-
-.nav-active-pill-dot {
-  position: absolute;
-  bottom: 4px;
-  width: 4px;
-  height: 4px;
+.nav-logo-img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
   border-radius: 50%;
-  background: var(--g);
-  box-shadow: 0 0 6px rgba(30, 90, 46, 0.8);
-  animation: pillDotPulse 2s infinite ease-in-out;
+  flex-shrink: 0;
 }
 
-@keyframes pillDotPulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.85;
-  }
-  50% {
-    transform: scale(1.4);
-    opacity: 1;
-  }
+.brand-text {
+  display: flex;
+  flex-direction: column;
 }
 
-.nav nav .cta {
-  background: var(--g) !important;
-  color: #fff !important;
-  font-weight: 700 !important;
-  box-shadow: 0 4px 14px rgba(30, 90, 46, 0.35) !important;
+.brand-logo {
+  font-family: var(--serif), serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--g);
 }
 
-.nav nav .cta:hover {
-  background: var(--g-dark) !important;
-  box-shadow: 0 6px 18px rgba(30, 90, 46, 0.45) !important;
+.brand-sub {
+  font-size: 0.64rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gold);
 }
 
-.nav nav .cta.active,
-.nav nav .cta.is-reserve-active {
-  background: #14401f !important;
-  box-shadow: 0 0 0 3px rgba(212, 163, 89, 0.5), 0 4px 16px rgba(30, 90, 46, 0.5) !important;
+/* Desktop Navigation Links */
+.desktop-nav {
+  display: none;
 }
 
 @media (min-width: 860px) {
-  .nav {
-    bottom: auto;
-    top: max(16px, env(safe-area-inset-top));
-    width: min(920px, calc(100% - 36px));
+  .desktop-nav {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 8px 14px 8px 24px;
-  }
-
-  .nav.is-scrolled {
-    background: rgba(255, 255, 255, 0.88);
-    box-shadow: var(--liquid-highlight), 0 24px 52px -6px rgba(18, 56, 28, 0.2), 0 8px 20px -2px rgba(0, 0, 0, 0.08);
-  }
-
-  .nav .brand {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    line-height: 1.1;
+    gap: 6px;
+    position: relative;
   }
 
   .nav-logo-img {
     width: 42px;
     height: 42px;
-    object-fit: contain;
-    border-radius: 50%;
-  }
-
-  .brand-text {
-    display: flex;
-    flex-direction: column;
   }
 
   .brand-logo {
-    font-family: var(--serif), serif;
     font-size: 1.55rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: var(--g);
   }
 
   .brand-sub {
     font-size: 0.68rem;
+  }
+
+  .desktop-nav .nav-item {
+    position: relative;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--gold);
-  }
-
-  .nav nav {
-    gap: 8px;
-  }
-
-  .nav nav .nav-item {
-    flex: none;
-    padding: 8px 18px;
-    font-size: 0.92rem;
-    flex-direction: row;
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    border-radius: 999px;
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    color: var(--ink);
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     gap: 6px;
+    user-select: none;
+  }
+
+  .desktop-nav .nav-item:hover {
+    background: rgba(30, 90, 46, 0.08);
+    color: var(--g);
+  }
+
+  .desktop-nav .nav-item.active {
+    background: rgba(30, 90, 46, 0.12);
+    color: var(--g);
+    font-weight: 700;
+    box-shadow: inset 0 1px 2px rgba(30, 90, 46, 0.08), 0 2px 8px rgba(30, 90, 46, 0.12);
   }
 
   .nav-active-pill-dot {
-    position: static;
-    margin-left: 2px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--g);
+    box-shadow: 0 0 6px rgba(30, 90, 46, 0.8);
   }
+
+  .desktop-nav .cta {
+    background: var(--g) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 14px rgba(30, 90, 46, 0.35) !important;
+  }
+
+  .desktop-nav .cta:hover {
+    background: var(--g-dark) !important;
+    box-shadow: 0 6px 18px rgba(30, 90, 46, 0.45) !important;
+  }
+
+  .desktop-nav .cta.active,
+  .desktop-nav .cta.is-reserve-active {
+    background: #14401f !important;
+    box-shadow: 0 0 0 3px rgba(212, 163, 89, 0.5), 0 4px 16px rgba(30, 90, 46, 0.5) !important;
+  }
+}
+
+/* Mobile Actions (Buttons + Hamburger Toggle) */
+.mobile-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (min-width: 860px) {
+  .mobile-nav-actions {
+    display: none;
+  }
+}
+
+.mobile-reserve-cta {
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  padding: 6px 14px !important;
+  min-height: 32px !important;
+  background: var(--g) !important;
+  color: #ffffff !important;
+}
+
+.mobile-menu-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s ease;
+}
+
+.mobile-menu-toggle:hover {
+  background: rgba(30, 90, 46, 0.1);
+}
+
+.hamburger-line {
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.mobile-menu-toggle.is-active .hamburger-line.top {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.mobile-menu-toggle.is-active .hamburger-line.mid {
+  opacity: 0;
+}
+
+.mobile-menu-toggle.is-active .hamburger-line.bot {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* =========================================
+   Mobile Liquid Glass Dropdown Menu
+   ========================================= */
+.mobile-glass-dropdown {
+  position: fixed;
+  top: calc(56px + max(12px, env(safe-area-inset-top)));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(420px, calc(100% - 24px));
+  z-index: 98;
+  border-radius: 24px;
+  padding: 16px;
+  animation: dropdownFadeDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  box-shadow: 
+    0 24px 60px -10px rgba(18, 56, 28, 0.32),
+    0 0 0 1px rgba(255, 255, 255, 0.95);
+}
+
+@keyframes dropdownFadeDown {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -10px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+.mobile-links-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.5);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+  background: rgba(30, 90, 46, 0.12);
+  color: var(--g);
+  font-weight: 700;
+}
+
+.mobile-active-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--g);
+  background: #e8f5e9;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.mobile-dropdown-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(220, 230, 222, 0.8);
+}
+
+.mobile-dropdown-footer .btn {
+  min-height: 40px;
+  font-size: 0.84rem;
+  padding: 0 10px;
 }
 
 /* Buttons */
@@ -443,7 +557,7 @@ a {
 @media (max-width: 860px) {
   .hero {
     min-height: auto;
-    padding: max(20px, env(safe-area-inset-top)) 16px 44px;
+    padding: calc(72px + max(12px, env(safe-area-inset-top))) 16px 48px;
     justify-content: flex-start;
   }
 }
@@ -1807,7 +1921,7 @@ address {
 .foot {
   display: grid;
   gap: 24px;
-  padding-block: 40px calc(88px + env(safe-area-inset-bottom));
+  padding-block: 40px calc(40px + env(safe-area-inset-bottom));
   border-top: 1px solid var(--line);
   color: var(--mute);
   font-size: 0.9rem;
