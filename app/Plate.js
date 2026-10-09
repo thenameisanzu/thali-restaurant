@@ -2,7 +2,6 @@
 import { useEffect, useState, useRef } from "react";
 
 const DISHES = [
-  // --- SET 1 (Default View: Dishes 1–3) ---
   {
     id: "thali",
     n: "Unlimited Kerala Sadya",
@@ -10,7 +9,6 @@ const DISHES = [
     tag: "🍛 Unlimited Sadya",
     desc: "18+ Authentic Kerala curries & hot refills",
     baseAngle: 180, // Center Left
-    set: 1,
   },
   {
     id: "dosa",
@@ -18,8 +16,7 @@ const DISHES = [
     img: "/masala_dosa.jpg",
     tag: "🥞 Crispy Ghee Roast",
     desc: "Golden roasted with pure ghee & chutneys",
-    baseAngle: 140, // Top Left
-    set: 1,
+    baseAngle: 140, // Upper Left
   },
   {
     id: "biryani",
@@ -27,28 +24,15 @@ const DISHES = [
     img: "/chicken_biryani.jpg",
     tag: "🍗 Malabar Biryani",
     desc: "Fragrant kaima rice with tender spiced chicken",
-    baseAngle: 220, // Bottom Left
-    set: 1,
+    baseAngle: 220, // Lower Left
   },
-
-  // --- SET 2 (Scroll 1: Dishes 4–6) ---
   {
     id: "beef-roast",
     n: "Porotta & Beef Roast",
     img: "/beef_roast.jpg",
     tag: "🥩 Porotta & Beef Fry",
     desc: "Layered flaky porotta with sizzling coconut beef roast",
-    baseAngle: 60, // Center Left when rotated 120° (60 + 120 = 180)
-    set: 2,
-  },
-  {
-    id: "chicken-dosa",
-    n: "Special Chicken Dosa",
-    img: "/chicken_dosa.jpg",
-    tag: "🥘 Non-Veg Dosa",
-    desc: "Crisp dosa stuffed with spicy chicken roast",
-    baseAngle: 20, // Top Left when rotated 120° (20 + 120 = 140)
-    set: 2,
+    baseAngle: 100, // Top Arc
   },
   {
     id: "fish-curry",
@@ -56,19 +40,23 @@ const DISHES = [
     img: "/fish_curry.jpg",
     tag: "🐟 Kottayam Fish Curry",
     desc: "Spicy red kudampuli fish curry with tapioca kappa",
-    baseAngle: 100, // Bottom Left when rotated 120° (100 + 120 = 220)
-    set: 2,
+    baseAngle: 260, // Bottom Arc
   },
-
-  // --- SET 3 (Scroll 2: Dishes 7–9) ---
+  {
+    id: "chicken-dosa",
+    n: "Special Chicken Dosa",
+    img: "/chicken_dosa.jpg",
+    tag: "🥘 Non-Veg Dosa",
+    desc: "Crisp dosa stuffed with spicy chicken roast",
+    baseAngle: 60, // Top Right Arc
+  },
   {
     id: "appam-stew",
     n: "Appam & Chicken Stew",
     img: "/appam_stew.jpg",
     tag: "🍲 Appam & Stew",
     desc: "Lacy soft appams with creamy coconut milk stew",
-    baseAngle: 300, // Center Left when rotated 240° (300 + 240 = 540 = 180)
-    set: 3,
+    baseAngle: 300, // Bottom Right Arc
   },
   {
     id: "payasam",
@@ -76,8 +64,7 @@ const DISHES = [
     img: "/palada_payasam.jpg",
     tag: "✨ Daily Sweet",
     desc: "Slow-simmered milk payasam with tender ada",
-    baseAngle: 260, // Top Left when rotated 240° (260 + 240 = 500 = 140)
-    set: 3,
+    baseAngle: 20, // Rotating entry
   },
   {
     id: "sambar",
@@ -85,14 +72,12 @@ const DISHES = [
     img: "/sambar.jpg",
     tag: "🍲 Homestyle Curry",
     desc: "Simmered toor dal with fresh drumsticks & spices",
-    baseAngle: 340, // Bottom Left when rotated 240° (340 + 240 = 580 = 220)
-    set: 3,
+    baseAngle: 340, // Rotating entry
   },
 ];
 
 export default function Plate() {
   const [rotationAngle, setRotationAngle] = useState(0);
-  const [activeSet, setActiveSet] = useState(1); // 1, 2, or 3
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const containerRef = useRef(null);
 
@@ -108,24 +93,12 @@ export default function Plate() {
             const totalScrollable = stage.offsetHeight - window.innerHeight;
             if (totalScrollable > 0) {
               const progress = Math.min(Math.max(-rect.top / totalScrollable, 0), 1);
-              // Rotate by 240 degrees total over the scroll (120 deg per set)
-              const currentAngle = progress * 240;
-              setRotationAngle(currentAngle);
-
-              if (progress < 0.38) {
-                setActiveSet(1);
-              } else if (progress < 0.76) {
-                setActiveSet(2);
-              } else {
-                setActiveSet(3);
-              }
+              // Rotate continuously through the 9 dishes across the scroll
+              setRotationAngle(progress * 360);
             }
           } else {
-            const rot = Math.min(window.scrollY * 0.4, 240);
+            const rot = (window.scrollY * 0.45) % 360;
             setRotationAngle(rot);
-            if (rot < 80) setActiveSet(1);
-            else if (rot < 160) setActiveSet(2);
-            else setActiveSet(3);
           }
           ticking = false;
         });
@@ -157,28 +130,8 @@ export default function Plate() {
     setTilt({ x: 0, y: 0 });
   };
 
-  const jumpToSet = (targetSet) => {
-    const stage = document.getElementById("hero-stage");
-    if (stage) {
-      const totalScrollable = stage.offsetHeight - window.innerHeight;
-      let ratio = 0;
-      if (targetSet === 2) ratio = 0.5;
-      if (targetSet === 3) ratio = 1.0;
-      const targetScroll = stage.offsetTop + totalScrollable * ratio;
-      window.scrollTo({ top: targetScroll, behavior: "smooth" });
-    } else {
-      const angles = { 1: 0, 2: 120, 3: 240 };
-      setRotationAngle(angles[targetSet] || 0);
-      setActiveSet(targetSet);
-    }
-  };
-
-  const stepPrev = () => {
-    jumpToSet(Math.max(activeSet - 1, 1));
-  };
-
-  const stepNext = () => {
-    jumpToSet(Math.min(activeSet + 1, 3));
+  const spinStep = (dir) => {
+    setRotationAngle((prev) => prev + dir * 40);
   };
 
   return (
@@ -217,8 +170,8 @@ export default function Plate() {
             // Effective position angle on the circle
             const effectiveAngle = (dish.baseAngle + rotationAngle) % 360;
             const normalized = (effectiveAngle + 360) % 360;
-            // Visible on the front arc between 110deg and 250deg
-            const isVisibleOnArc = normalized >= 110 && normalized <= 250;
+            // 4 to 5 dishes visible along the primary arc (between 50deg and 310deg)
+            const isVisibleOnArc = normalized >= 50 && normalized <= 310;
 
             return (
               <div
@@ -233,7 +186,7 @@ export default function Plate() {
                   className="revolving-dish-unit"
                   style={{
                     transform: `rotate(-${rotationAngle}deg)`,
-                    transition: "transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, filter 0.35s ease",
+                    transition: "transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease",
                   }}
                 >
                   <div className="dish-wheel-frame">
@@ -264,13 +217,13 @@ export default function Plate() {
         </div>
       </div>
 
-      {/* Dynamic 9-Dish Controller & Set Indicator */}
+      {/* Dynamic 5-Dish Visible Controller & Hint */}
       <div className="revolving-controls-bar">
         <button
           type="button"
-          className={`disk-nav-btn prev glass ${activeSet === 1 ? "is-disabled" : ""}`}
-          onClick={stepPrev}
-          aria-label="Previous dishes"
+          className="disk-nav-btn prev glass"
+          onClick={() => spinStep(-1)}
+          aria-label="Previous dish"
         >
           ‹
         </button>
@@ -278,28 +231,15 @@ export default function Plate() {
         <div className="disk-hint-pill glass">
           <span className="disk-spin-icon">🎡</span>
           <span className="disk-set-label">
-            {activeSet === 1 && (
-              <><strong>Dishes 1–3 of 9</strong> • Scroll to spin next</>
-            )}
-            {activeSet === 2 && (
-              <><strong>Dishes 4–6 of 9</strong> • Scroll to spin next</>
-            )}
-            {activeSet === 3 && (
-              <><strong>Dishes 7–9 of 9</strong> • Scroll for story &amp; menu</>
-            )}
+            <strong>9 House Specialties</strong> • Scroll to rotate wheel
           </span>
-          <div className="disk-dots">
-            <span className={`disk-dot ${activeSet === 1 ? "active" : ""}`} onClick={() => jumpToSet(1)} />
-            <span className={`disk-dot ${activeSet === 2 ? "active" : ""}`} onClick={() => jumpToSet(2)} />
-            <span className={`disk-dot ${activeSet === 3 ? "active" : ""}`} onClick={() => jumpToSet(3)} />
-          </div>
         </div>
 
         <button
           type="button"
-          className={`disk-nav-btn next glass ${activeSet === 3 ? "is-disabled" : ""}`}
-          onClick={stepNext}
-          aria-label="Next dishes"
+          className="disk-nav-btn next glass"
+          onClick={() => spinStep(1)}
+          aria-label="Next dish"
         >
           ›
         </button>

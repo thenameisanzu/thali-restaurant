@@ -819,28 +819,28 @@ a {
 }
 
 /* =========================================
-   Revolving Carousel Disk Wheel (9 Dishes, 3 Visible on Arc)
+   Revolving Carousel Disk Wheel (9 Dishes, 4–5 Visible on Arc)
    ========================================= */
 :root {
-  --disk-radius: 205px;
+  --disk-radius: 175px;
 }
 
 @media (min-width: 900px) {
   :root {
-    --disk-radius: 295px;
+    --disk-radius: 250px;
   }
 }
 
 @media (min-width: 1200px) {
   :root {
-    --disk-radius: 330px;
+    --disk-radius: 280px;
   }
 }
 
 .revolving-disk-viewport {
   position: relative;
   width: 100%;
-  max-width: 600px;
+  max-width: 620px;
   min-height: 500px;
   display: flex;
   flex-direction: column;
@@ -861,22 +861,22 @@ a {
   position: absolute;
   top: 50%;
   right: 0;
-  transform: translate(50%, -50%);
-  width: 520px;
-  height: 520px;
+  transform: translate(25%, -50%);
+  width: 500px;
+  height: 500px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(212, 163, 89, 0.3) 0%, rgba(30, 90, 46, 0.16) 50%, transparent 75%);
-  filter: blur(60px);
+  filter: blur(55px);
   pointer-events: none;
   z-index: 0;
   animation: glowPulse 5s infinite alternate ease-in-out;
 }
 
-/* Orbit Track Ring (Shifted further to the right edge) */
+/* Orbit Track Ring (Positioned to cradle the 5-dish arc) */
 .orbit-track-ring {
   position: absolute;
   top: 50%;
-  right: calc(var(--disk-radius) * -0.9);
+  right: calc(var(--disk-radius) * -0.38);
   transform: translateY(-50%);
   width: calc(var(--disk-radius) * 2);
   height: calc(var(--disk-radius) * 2);
@@ -888,11 +888,11 @@ a {
 
 @media (max-width: 899px) {
   .orbit-track-ring {
-    right: calc(var(--disk-radius) * -0.8);
+    right: calc(var(--disk-radius) * -0.25);
   }
 }
 
-/* 3D Revolving Stage (Center aligned off-screen right) */
+/* 3D Revolving Stage */
 .revolving-disk-stage {
   position: relative;
   width: calc(var(--disk-radius) * 2);
@@ -902,12 +902,12 @@ a {
   justify-content: center;
   transform-style: preserve-3d;
   z-index: 2;
-  margin-right: calc(var(--disk-radius) * -0.9);
+  margin-right: calc(var(--disk-radius) * -0.38);
 }
 
 @media (max-width: 899px) {
   .revolving-disk-stage {
-    margin-right: calc(var(--disk-radius) * -0.8);
+    margin-right: calc(var(--disk-radius) * -0.25);
   }
 }
 
@@ -947,8 +947,8 @@ a {
 
 .revolving-dish-unit {
   position: absolute;
-  width: min(130px, 32vw);
-  height: min(130px, 32vw);
+  width: min(120px, 30vw);
+  height: min(120px, 30vw);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -959,15 +959,15 @@ a {
 
 @media (min-width: 900px) {
   .revolving-dish-unit {
-    width: 175px;
-    height: 175px;
+    width: 155px;
+    height: 155px;
   }
 }
 
 @media (min-width: 1200px) {
   .revolving-dish-unit {
-    width: 195px;
-    height: 195px;
+    width: 168px;
+    height: 168px;
   }
 }
 
