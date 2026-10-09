@@ -796,7 +796,7 @@ a {
    ========================================= */
 .hero-scroll-stage {
   position: relative;
-  height: 170vh; /* Scroll room for rotating through dishes before advancing */
+  height: 210vh; /* Smooth runway for rotating through 3 sets (9 dishes) */
   width: 100%;
 }
 
@@ -814,34 +814,34 @@ a {
 
 @media (max-width: 899px) {
   .hero-scroll-stage {
-    height: 145vh;
+    height: 165vh;
   }
 }
 
 /* =========================================
-   Revolving Carousel Disk Wheel (6 Dishes, 3 Visible on Arc)
+   Revolving Carousel Disk Wheel (9 Dishes, 3 Visible on Arc)
    ========================================= */
 :root {
-  --disk-radius: 175px;
+  --disk-radius: 205px;
 }
 
 @media (min-width: 900px) {
   :root {
-    --disk-radius: 250px;
+    --disk-radius: 295px;
   }
 }
 
 @media (min-width: 1200px) {
   :root {
-    --disk-radius: 280px;
+    --disk-radius: 330px;
   }
 }
 
 .revolving-disk-viewport {
   position: relative;
   width: 100%;
-  max-width: 580px;
-  min-height: 480px;
+  max-width: 600px;
+  min-height: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -852,7 +852,7 @@ a {
 
 @media (min-width: 900px) {
   .revolving-disk-viewport {
-    min-height: 520px;
+    min-height: 540px;
     align-items: flex-end;
   }
 }
@@ -861,22 +861,22 @@ a {
   position: absolute;
   top: 50%;
   right: 0;
-  transform: translate(30%, -50%);
-  width: 480px;
-  height: 480px;
+  transform: translate(50%, -50%);
+  width: 520px;
+  height: 520px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(212, 163, 89, 0.28) 0%, rgba(30, 90, 46, 0.16) 50%, transparent 75%);
-  filter: blur(55px);
+  background: radial-gradient(circle, rgba(212, 163, 89, 0.3) 0%, rgba(30, 90, 46, 0.16) 50%, transparent 75%);
+  filter: blur(60px);
   pointer-events: none;
   z-index: 0;
   animation: glowPulse 5s infinite alternate ease-in-out;
 }
 
-/* Orbit Track Ring (Positioned at right edge) */
+/* Orbit Track Ring (Shifted further to the right edge) */
 .orbit-track-ring {
   position: absolute;
   top: 50%;
-  right: calc(var(--disk-radius) * -0.55);
+  right: calc(var(--disk-radius) * -0.9);
   transform: translateY(-50%);
   width: calc(var(--disk-radius) * 2);
   height: calc(var(--disk-radius) * 2);
@@ -888,11 +888,11 @@ a {
 
 @media (max-width: 899px) {
   .orbit-track-ring {
-    right: calc(var(--disk-radius) * -0.45);
+    right: calc(var(--disk-radius) * -0.8);
   }
 }
 
-/* 3D Revolving Stage */
+/* 3D Revolving Stage (Center aligned off-screen right) */
 .revolving-disk-stage {
   position: relative;
   width: calc(var(--disk-radius) * 2);
@@ -902,12 +902,12 @@ a {
   justify-content: center;
   transform-style: preserve-3d;
   z-index: 2;
-  margin-right: calc(var(--disk-radius) * -0.55);
+  margin-right: calc(var(--disk-radius) * -0.9);
 }
 
 @media (max-width: 899px) {
   .revolving-disk-stage {
-    margin-right: calc(var(--disk-radius) * -0.45);
+    margin-right: calc(var(--disk-radius) * -0.8);
   }
 }
 
