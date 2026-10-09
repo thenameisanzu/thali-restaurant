@@ -70,7 +70,17 @@ export default function Home() {
         </div>
         
         <p className="kicker animate-fade-down delay-1">Opposite Malayala Manorama, KK Road, Kottayam</p>
-        <h1 className="hero-title animate-zoom-in">Thali</h1>
+        <h1 className="hero-title animated-brand-title" aria-label="Thali">
+          {"Thali".split("").map((char, index) => (
+            <span
+              key={index}
+              className="animated-letter"
+              style={{ "--char-index": index }}
+            >
+              {char}
+            </span>
+          ))}
+        </h1>
         <p className="sub-title animate-fade-down delay-2">
           Traditional Kerala Meals • Specialty Dosas • Dum Biryani
         </p>

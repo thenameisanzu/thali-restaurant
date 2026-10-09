@@ -458,12 +458,81 @@ a {
 .hero-title {
   position: relative;
   z-index: 2;
-  font-size: clamp(3.2rem, 12vw, 6.5rem);
+  font-size: clamp(3.4rem, 12vw, 6.8rem);
   line-height: 0.95;
-  color: var(--g);
   margin: 0.04em 0 0.12em;
-  letter-spacing: -0.03em;
-  text-shadow: 0 4px 16px rgba(30, 90, 46, 0.06);
+  letter-spacing: -0.02em;
+  cursor: default;
+}
+
+/* Animated Brand Title with Staggered Entrance & Liquid Shimmer */
+.animated-brand-title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    115deg,
+    #14421f 0%,
+    #1e5a2e 25%,
+    #d4a359 50%,
+    #1e5a2e 75%,
+    #14421f 100%
+  );
+  background-size: 240% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textShimmerWave 6s ease-in-out infinite;
+  filter: drop-shadow(0 6px 18px rgba(30, 90, 46, 0.12));
+}
+
+@keyframes textShimmerWave {
+  0% {
+    background-position: 240% 0;
+  }
+  50% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: -240% 0;
+  }
+}
+
+.animated-letter {
+  display: inline-block;
+  transform-origin: 50% 85%;
+  animation: letterEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) backwards,
+             letterGentleBreathe 4s ease-in-out infinite alternate;
+  animation-delay: calc(var(--char-index) * 0.07s), calc(var(--char-index) * 0.2s + 0.8s);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+}
+
+.animated-letter:hover {
+  transform: translateY(-8px) scale(1.15) rotate(calc((var(--char-index) - 2) * 3deg));
+  filter: drop-shadow(0 8px 16px rgba(212, 163, 89, 0.5));
+}
+
+@keyframes letterEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.7) rotate(-8deg);
+  }
+  60% {
+    transform: translateY(-6px) scale(1.08) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes letterGentleBreathe {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-3px);
+  }
 }
 
 .sub-title {
