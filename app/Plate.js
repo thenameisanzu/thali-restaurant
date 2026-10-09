@@ -1,62 +1,69 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 
-const SATELLITE_DISHES = [
+const DISHES = [
+  {
+    id: "thali",
+    n: "Unlimited Kerala Sadya",
+    img: "/hero_thali.jpg",
+    tag: "🍛 Unlimited Sadya",
+    baseAngle: 180, // Center Left
+  },
   {
     id: "dosa",
     n: "Crispy Ghee Roast",
     img: "/masala_dosa.jpg",
     tag: "🥞 Crispy Ghee Roast",
-    angle: 0,
+    baseAngle: 140, // Upper Left
   },
   {
     id: "biryani",
     n: "Malabar Dum Biryani",
     img: "/chicken_biryani.jpg",
     tag: "🍗 Malabar Biryani",
-    angle: 45,
+    baseAngle: 220, // Lower Left
   },
   {
     id: "beef-roast",
     n: "Porotta & Beef Roast",
     img: "/beef_roast.jpg",
     tag: "🥩 Porotta & Beef Fry",
-    angle: 90,
+    baseAngle: 100, // Top Arc
   },
   {
     id: "fish-curry",
     n: "Kottayam Meen Curry",
     img: "/fish_curry.jpg",
     tag: "🐟 Kottayam Fish Curry",
-    angle: 135,
+    baseAngle: 260, // Bottom Arc
   },
   {
     id: "chicken-dosa",
     n: "Special Chicken Dosa",
     img: "/chicken_dosa.jpg",
     tag: "🥘 Non-Veg Dosa",
-    angle: 180,
+    baseAngle: 60, // Top Right Entry
   },
   {
     id: "appam-stew",
     n: "Appam & Chicken Stew",
     img: "/appam_stew.jpg",
     tag: "🍲 Appam & Stew",
-    angle: 225,
+    baseAngle: 300, // Bottom Right Entry
   },
   {
     id: "payasam",
     n: "Rich Palada Payasam",
     img: "/palada_payasam.jpg",
     tag: "✨ Daily Sweet",
-    angle: 270,
+    baseAngle: 20, // Offscreen Right
   },
   {
     id: "sambar",
     n: "Kottayam Sambar & Curries",
     img: "/sambar.jpg",
     tag: "🍲 Homestyle Curry",
-    angle: 315,
+    baseAngle: 340, // Offscreen Right
   },
 ];
 
@@ -80,7 +87,7 @@ export default function Plate() {
               setRotationAngle(progress * 360);
             }
           } else {
-            const rot = (window.scrollY * 0.4) % 360;
+            const rot = (window.scrollY * 0.45) % 360;
             setRotationAngle(rot);
           }
           ticking = false;
@@ -114,22 +121,22 @@ export default function Plate() {
   };
 
   const spinStep = (dir) => {
-    setRotationAngle((prev) => prev + dir * 45);
+    setRotationAngle((prev) => prev + dir * 40);
   };
 
   return (
     <div
-      className="hero-dish-showcase"
+      className="revolving-wheel-container"
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       {/* Ambient Radial Golden Aura */}
-      <div className="showcase-ambient-glow" aria-hidden="true" />
+      <div className="wheel-ambient-glow" aria-hidden="true" />
 
-      {/* 3D Kinetic Orbital Stage */}
+      {/* 3D Revolving Stage */}
       <div
-        className="showcase-stage"
+        className="wheel-3d-stage"
         style={{
           transform: `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
           transition:
@@ -138,102 +145,86 @@ export default function Plate() {
               : "transform 0.08s ease-out",
         }}
       >
-        {/* CENTERPIECE: Signature Thali Sadya (Fills Center Void) */}
-        <div className="centerpiece-dish-wrapper">
-          <div className="centerpiece-frame">
-            <img
-              src="/hero_thali.jpg"
-              alt="Authentic Kerala Unlimited Thali Sadya"
-              className="centerpiece-img"
-            />
-            <div className="wheel-specular-glare" aria-hidden="true" />
-
-            {/* Steaming Hot Aroma Smoke */}
-            <div className="wheel-steam-container" aria-hidden="true">
-              <span className="wheel-steam ws1" />
-              <span className="wheel-steam ws2" />
-            </div>
-
-            <div className="centerpiece-ring" aria-hidden="true" />
-          </div>
-
-          <div className="centerpiece-label-pill glass">
-            <span className="center-pill-star">★</span>
-            <span className="center-pill-text">Unlimited Kerala Sadya</span>
-          </div>
-        </div>
-
-        {/* REVOLVING SATELLITE DISHES ORBIT */}
+        {/* Revolving Rotor Hub */}
         <div
-          className="satellite-orbit-hub"
+          className="wheel-rotor-hub"
           style={{
             transform: `rotate(${rotationAngle}deg)`,
             transition: "transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
-          {SATELLITE_DISHES.map((dish) => (
-            <div
-              key={dish.id}
-              className="satellite-dish-spoke"
-              style={{
-                transform: `rotate(${dish.angle}deg) translate(var(--satellite-radius)) rotate(-${dish.angle}deg)`,
-              }}
-            >
-              {/* Counter-rotate dish so food image stays upright */}
+          {DISHES.map((dish) => {
+            // Effective angle on the 360 circle
+            const effectiveAngle = (dish.baseAngle + rotationAngle) % 360;
+            const normalized = (effectiveAngle + 360) % 360;
+            // Visible along the curved front/left arc (between 60deg and 300deg)
+            const isVisibleOnArc = normalized >= 60 && normalized <= 300;
+
+            return (
               <div
-                className="satellite-dish-unit"
+                key={dish.id}
+                className={`wheel-dish-spoke ${isVisibleOnArc ? "is-visible" : "is-hidden"}`}
                 style={{
-                  transform: `rotate(-${rotationAngle}deg)`,
-                  transition: "transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)",
+                  transform: `rotate(${dish.baseAngle}deg) translate(var(--wheel-radius)) rotate(-${dish.baseAngle}deg)`,
                 }}
               >
-                <div className="satellite-wheel-frame">
-                  <img
-                    src={dish.img}
-                    alt={dish.n}
-                    className="satellite-wheel-img"
-                  />
-                  <div className="wheel-specular-glare" aria-hidden="true" />
+                {/* Counter-rotate the dish unit so food image stays upright */}
+                <div
+                  className="wheel-dish-unit"
+                  style={{
+                    transform: `rotate(-${rotationAngle}deg)`,
+                    transition: "transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease",
+                  }}
+                >
+                  <div className="dish-plate-frame">
+                    <img
+                      src={dish.img}
+                      alt={dish.n}
+                      className="dish-plate-img"
+                    />
+                    <div className="wheel-specular-glare" aria-hidden="true" />
 
-                  {/* Steaming Smoke Effect */}
-                  <div className="wheel-steam-container" aria-hidden="true">
-                    <span className="wheel-steam ws1" />
+                    {/* Steaming Hot Smoke Vapor */}
+                    <div className="wheel-steam-container" aria-hidden="true">
+                      <span className="wheel-steam ws1" />
+                      <span className="wheel-steam ws2" />
+                    </div>
+                  </div>
+
+                  {/* Floating Glass Label Pill */}
+                  <div className="dish-plate-pill glass">
+                    <span>{dish.tag}</span>
                   </div>
                 </div>
-
-                {/* Floating Glass Label Pill */}
-                <div className="satellite-label-pill glass">
-                  <span>{dish.tag}</span>
-                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
-      {/* Clean Bottom Controls Bar (Zero Overlap) */}
-      <div className="showcase-controls-bar">
+      {/* Clean Bottom Controls Bar (Positioned below dishes with zero overlap) */}
+      <div className="wheel-controls-bar">
         <button
           type="button"
-          className="showcase-nav-btn prev glass"
+          className="wheel-nav-btn prev glass"
           onClick={() => spinStep(-1)}
-          aria-label="Previous dishes"
+          aria-label="Previous dish"
         >
           ‹
         </button>
 
-        <div className="showcase-hint-pill glass">
-          <span className="showcase-spin-icon">🎡</span>
+        <div className="wheel-hint-pill glass">
+          <span className="wheel-spin-icon">🎡</span>
           <span>
-            <strong>9 Kerala Specialties</strong> • Scroll to revolve
+            <strong>9 Specialties</strong> • Scroll down to revolve
           </span>
         </div>
 
         <button
           type="button"
-          className="showcase-nav-btn next glass"
+          className="wheel-nav-btn next glass"
           onClick={() => spinStep(1)}
-          aria-label="Next dishes"
+          aria-label="Next dish"
         >
           ›
         </button>

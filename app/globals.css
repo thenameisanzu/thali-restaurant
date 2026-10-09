@@ -820,29 +820,29 @@ a {
 }
 
 /* =========================================
-   Centerpiece Platter + Orbiting Satellites Showcase
+   Revolving Dish Wheel (Right-Aligned, No Center Dish)
    ========================================= */
 :root {
-  --satellite-radius: 155px;
+  --wheel-radius: 175px;
 }
 
 @media (min-width: 900px) {
   :root {
-    --satellite-radius: 205px;
+    --wheel-radius: 260px;
   }
 }
 
 @media (min-width: 1200px) {
   :root {
-    --satellite-radius: 228px;
+    --wheel-radius: 295px;
   }
 }
 
-.hero-dish-showcase {
+.revolving-wheel-container {
   position: relative;
   width: 100%;
-  max-width: 580px;
-  min-height: 490px;
+  max-width: 620px;
+  min-height: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -852,126 +852,48 @@ a {
 }
 
 @media (min-width: 900px) {
-  .hero-dish-showcase {
-    min-height: 530px;
+  .revolving-wheel-container {
+    min-height: 540px;
+    align-items: flex-end;
   }
 }
 
-.showcase-ambient-glow {
+.wheel-ambient-glow {
   position: absolute;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 480px;
-  height: 480px;
+  top: 50%;
+  right: 0;
+  transform: translate(30%, -50%);
+  width: 500px;
+  height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(212, 163, 89, 0.32) 0%, rgba(30, 90, 46, 0.16) 55%, transparent 75%);
+  background: radial-gradient(circle, rgba(212, 163, 89, 0.3) 0%, rgba(30, 90, 46, 0.16) 50%, transparent 75%);
   filter: blur(55px);
   pointer-events: none;
   z-index: 0;
   animation: glowPulse 5s infinite alternate ease-in-out;
 }
 
-/* 3D Showcase Stage */
-.showcase-stage {
+/* 3D Revolving Stage */
+.wheel-3d-stage {
   position: relative;
-  width: calc(var(--satellite-radius) * 2 + 120px);
-  height: calc(var(--satellite-radius) * 2 + 120px);
+  width: calc(var(--wheel-radius) * 2);
+  height: calc(var(--wheel-radius) * 2);
   display: flex;
   align-items: center;
   justify-content: center;
   transform-style: preserve-3d;
   z-index: 2;
+  margin-right: calc(var(--wheel-radius) * -0.65);
 }
 
-/* CENTERPIECE DISH (Unlimited Kerala Sadya) */
-.centerpiece-dish-wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 180px;
-  height: 180px;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-@media (min-width: 900px) {
-  .centerpiece-dish-wrapper {
-    width: 220px;
-    height: 220px;
+@media (max-width: 899px) {
+  .wheel-3d-stage {
+    margin-right: calc(var(--wheel-radius) * -0.55);
   }
 }
 
-@media (min-width: 1200px) {
-  .centerpiece-dish-wrapper {
-    width: 236px;
-    height: 236px;
-  }
-}
-
-.centerpiece-frame {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
-  position: relative;
-  box-shadow: 
-    0 24px 60px -8px rgba(18, 56, 28, 0.45),
-    0 0 0 5px rgba(255, 255, 255, 0.98),
-    0 0 0 9px var(--gold);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.centerpiece-frame:hover {
-  transform: scale(1.04);
-  box-shadow: 
-    0 30px 70px -8px rgba(18, 56, 28, 0.55),
-    0 0 0 6px #ffffff,
-    0 0 0 11px var(--gold);
-}
-
-.centerpiece-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  user-select: none;
-  border-radius: 50%;
-}
-
-.centerpiece-label-pill {
+.wheel-rotor-hub {
   position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 14px;
-  border-radius: 999px;
-  font-size: 0.76rem;
-  font-weight: 700;
-  white-space: nowrap;
-  color: var(--g-dark);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
-  z-index: 12;
-  pointer-events: none;
-  border: 1px solid rgba(212, 163, 89, 0.6);
-}
-
-.center-pill-star {
-  color: #e5a017;
-}
-
-/* SATELLITE DISHES ORBIT */
-.satellite-orbit-hub {
-  position: absolute;
-  top: 50%;
-  left: 50%;
   width: 0;
   height: 0;
   display: flex;
@@ -981,7 +903,7 @@ a {
   will-change: transform;
 }
 
-.satellite-dish-spoke {
+.wheel-dish-spoke {
   position: absolute;
   width: 0;
   height: 0;
@@ -989,12 +911,25 @@ a {
   align-items: center;
   justify-content: center;
   transform-origin: 0 0;
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
-.satellite-dish-unit {
+.wheel-dish-spoke.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.wheel-dish-spoke.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.wheel-dish-unit {
   position: absolute;
-  width: min(88px, 24vw);
-  height: min(88px, 24vw);
+  width: min(115px, 28vw);
+  height: min(115px, 28vw);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1004,41 +939,41 @@ a {
 }
 
 @media (min-width: 900px) {
-  .satellite-dish-unit {
-    width: 104px;
-    height: 104px;
+  .wheel-dish-unit {
+    width: 145px;
+    height: 145px;
   }
 }
 
 @media (min-width: 1200px) {
-  .satellite-dish-unit {
-    width: 112px;
-    height: 112px;
+  .wheel-dish-unit {
+    width: 158px;
+    height: 158px;
   }
 }
 
-.satellite-wheel-frame {
+.dish-plate-frame {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   overflow: hidden;
   position: relative;
   box-shadow: 
-    0 12px 30px -4px rgba(18, 56, 28, 0.35),
-    0 0 0 3px rgba(255, 255, 255, 0.98),
-    0 0 0 5.5px rgba(212, 163, 89, 0.75);
+    0 20px 48px -6px rgba(18, 56, 28, 0.4),
+    0 0 0 4.5px rgba(255, 255, 255, 0.98),
+    0 0 0 8px rgba(212, 163, 89, 0.75);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.satellite-wheel-frame:hover {
-  transform: scale(1.08);
+.dish-plate-frame:hover {
+  transform: scale(1.07);
   box-shadow: 
-    0 16px 36px -4px rgba(18, 56, 28, 0.48),
-    0 0 0 4px #ffffff,
-    0 0 0 7px var(--gold);
+    0 26px 56px -6px rgba(18, 56, 28, 0.5),
+    0 0 0 5.5px #ffffff,
+    0 0 0 10px var(--gold);
 }
 
-.satellite-wheel-img {
+.dish-plate-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1047,40 +982,40 @@ a {
   border-radius: 50%;
 }
 
-.satellite-label-pill {
+.dish-plate-pill {
   position: absolute;
-  bottom: -6px;
+  bottom: -8px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   font-weight: 700;
   white-space: nowrap;
-  padding: 2px 7px;
+  padding: 3px 10px;
   border-radius: 999px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
   z-index: 5;
   pointer-events: none;
 }
 
 @media (min-width: 900px) {
-  .satellite-label-pill {
-    font-size: 0.68rem;
-    padding: 3px 9px;
-    bottom: -8px;
+  .dish-plate-pill {
+    font-size: 0.74rem;
+    padding: 4px 12px;
+    bottom: -9px;
   }
 }
 
-/* Controls Bar (Clean bottom placement with zero overlap) */
-.showcase-controls-bar {
+/* Controls Bar (Clean bottom placement below wheel) */
+.wheel-controls-bar {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-top: 32px;
-  z-index: 10;
+  margin-top: 36px;
+  z-index: 20;
   position: relative;
 }
 
-.showcase-nav-btn {
+.wheel-nav-btn {
   width: 34px;
   height: 34px;
   border-radius: 50%;
@@ -1097,17 +1032,17 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.9);
 }
 
-.showcase-nav-btn:hover {
+.wheel-nav-btn:hover {
   background: var(--g);
   color: #ffffff;
   transform: scale(1.12);
 }
 
-.showcase-nav-btn:active {
+.wheel-nav-btn:active {
   transform: scale(0.92);
 }
 
-.showcase-hint-pill {
+.wheel-hint-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1118,7 +1053,7 @@ a {
   color: var(--g-dark);
 }
 
-.showcase-spin-icon {
+.wheel-spin-icon {
   animation: spinIcon 8s linear infinite;
 }
 
