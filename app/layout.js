@@ -1,4 +1,4 @@
-import { Instrument_Serif, Hanken_Grotesk } from "next/font/google";
+import { Instrument_Serif, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 const serif = Instrument_Serif({
@@ -8,9 +8,11 @@ const serif = Instrument_Serif({
   variable: "--serif",
 });
 
-const sans = Hanken_Grotesk({
+const sans = Plus_Jakarta_Sans({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
   variable: "--sans",
+  display: "swap",
 });
 
 export const metadata = {
